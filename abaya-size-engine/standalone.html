@@ -1,0 +1,1098 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>عبايتي — متجر تجريبي · AI Abaya Size Engine</title>
+    <style>
+:root {
+  --ink: #1c1a18;
+  --ink-soft: #4b4640;
+  --muted: #8a8178;
+  --line: #e7e1d8;
+  --bg: #f6f2ec;
+  --card: #ffffff;
+  --gold: #b08d4f;
+  --gold-soft: #d9c39a;
+  --accent: #1c1a18;
+  --ok: #3f7d5b;
+  --warn: #b8863b;
+  --bad: #b45a4b;
+  --radius: 16px;
+  --shadow: 0 18px 50px rgba(28, 26, 24, 0.14);
+  font-family: "Segoe UI", "Tahoma", "Noto Kufi Arabic", system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  direction: rtl;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--gold); }
+
+/* ---- product page mock ---- */
+.shell { max-width: 1040px; margin: 0 auto; padding: 28px 20px 80px; }
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-bottom: 20px; border-bottom: 1px solid var(--line); margin-bottom: 28px;
+}
+.brand { font-weight: 800; letter-spacing: .5px; font-size: 20px; }
+.brand span { color: var(--gold); }
+.navlinks a { margin-inline-start: 18px; text-decoration: none; color: var(--ink-soft); font-size: 14px; }
+
+.product { display: grid; grid-template-columns: 1fr 1fr; gap: 34px; }
+@media (max-width: 760px) { .product { grid-template-columns: 1fr; } }
+
+.gallery {
+  background: linear-gradient(160deg, #2a2723, #4a453d);
+  border-radius: var(--radius); min-height: 420px;
+  display: flex; align-items: center; justify-content: center;
+  color: #efe7d8; position: relative; overflow: hidden;
+}
+.gallery::after {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(120% 80% at 30% 10%, rgba(255,255,255,.08), transparent 60%);
+}
+.gallery .abaya-illu { font-size: 120px; filter: drop-shadow(0 20px 30px rgba(0,0,0,.4)); }
+
+.info h1 { font-size: 26px; margin: 4px 0 6px; }
+.price { font-size: 22px; color: var(--gold); font-weight: 800; margin: 8px 0 4px; }
+.meta { color: var(--muted); font-size: 14px; margin-bottom: 18px; }
+.selector label { display: block; font-size: 13px; color: var(--ink-soft); margin: 14px 0 6px; }
+select, input[type="number"], input[type="text"] {
+  width: 100%; padding: 12px 14px; border: 1px solid var(--line);
+  border-radius: 12px; background: #fff; font: inherit; color: var(--ink);
+}
+select:focus, input:focus { outline: 2px solid var(--gold-soft); border-color: var(--gold); }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  border: none; border-radius: 12px; padding: 14px 18px; font: inherit;
+  font-weight: 700; cursor: pointer; transition: transform .08s ease, filter .15s ease;
+}
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--ink); color: #fff; }
+.btn-gold {
+  width: 100%; margin-top: 20px; font-size: 16px;
+  background: linear-gradient(135deg, #c9a862, #a97f3f); color: #1c1408;
+  box-shadow: 0 12px 26px rgba(176, 141, 79, .35);
+}
+.btn-ghost { background: transparent; color: var(--ink-soft); border: 1px solid var(--line); }
+.btn[disabled] { opacity: .5; cursor: not-allowed; }
+.btn-block { width: 100%; }
+
+.addcart { margin-top: 10px; }
+
+/* ---- modal / widget ---- */
+.overlay {
+  position: fixed; inset: 0; background: rgba(24, 22, 20, .55);
+  backdrop-filter: blur(3px); display: none; align-items: center; justify-content: center;
+  z-index: 50; padding: 16px;
+}
+.overlay.open { display: flex; }
+.modal {
+  background: var(--card); width: 100%; max-width: 460px; border-radius: 20px;
+  box-shadow: var(--shadow); overflow: hidden; max-height: 94vh; display: flex; flex-direction: column;
+}
+.modal-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 18px; border-bottom: 1px solid var(--line);
+}
+.modal-head .title { font-weight: 800; }
+.modal-head .title small { display: block; color: var(--muted); font-weight: 500; font-size: 12px; }
+.close { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--muted); line-height: 1; }
+.modal-body { padding: 20px 18px; overflow: auto; }
+
+.steps { display: flex; gap: 6px; padding: 12px 18px 0; }
+.steps .dot { flex: 1; height: 4px; border-radius: 3px; background: var(--line); }
+.steps .dot.active { background: var(--gold); }
+.steps .dot.done { background: var(--gold-soft); }
+
+.h-step { font-size: 18px; font-weight: 800; margin: 4px 0 2px; }
+.sub { color: var(--muted); font-size: 13px; margin-bottom: 16px; }
+
+.mode-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+.mode-tabs button {
+  flex: 1; padding: 10px; border-radius: 12px; border: 1px solid var(--line);
+  background: #fff; font: inherit; cursor: pointer; font-size: 13px; color: var(--ink-soft);
+}
+.mode-tabs button.active { border-color: var(--gold); background: #fbf7ef; color: var(--ink); font-weight: 700; }
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.field small { color: var(--muted); font-size: 12px; }
+
+.chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 4px; }
+.chip {
+  padding: 9px 12px; border-radius: 999px; border: 1px solid var(--line);
+  background: #fff; cursor: pointer; font: inherit; font-size: 13px; color: var(--ink-soft);
+}
+.chip.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+/* ---- scan simulator ---- */
+.scanner {
+  border: 2px dashed var(--gold-soft); border-radius: 16px; background: #2a2723;
+  color: #efe7d8; min-height: 260px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center; padding: 18px; gap: 12px;
+  position: relative; overflow: hidden;
+}
+.scanner .silhouette { font-size: 92px; opacity: .9; }
+.scan-line {
+  position: absolute; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  animation: sweep 1.6s linear infinite; display: none;
+}
+.scanner.scanning .scan-line { display: block; }
+@keyframes sweep { 0% { top: 8%; } 50% { top: 92%; } 100% { top: 8%; } }
+.scanner .hint { font-size: 13px; opacity: .85; }
+.scanner .turn { font-size: 15px; font-weight: 700; }
+
+.analyzing { text-align: center; padding: 26px 0; }
+.spinner {
+  width: 46px; height: 46px; border-radius: 50%; margin: 0 auto 14px;
+  border: 4px solid var(--line); border-top-color: var(--gold); animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---- result ---- */
+.result-hero { text-align: center; padding: 8px 0 4px; }
+.result-hero .eyebrow { color: var(--muted); font-size: 13px; letter-spacing: 1px; }
+.result-hero .size { font-size: 52px; font-weight: 800; color: var(--ink); line-height: 1.1; margin: 4px 0; }
+.result-hero .size b { color: var(--gold); }
+.result-hero .width { font-size: 18px; color: var(--ink-soft); }
+
+.confidence { margin: 18px 0; }
+.confidence .bar { height: 10px; border-radius: 6px; background: var(--line); overflow: hidden; }
+.confidence .bar > i { display: block; height: 100%; background: linear-gradient(90deg, #c9a862, #a97f3f); }
+.confidence .lbl { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; }
+.confidence .lbl b { color: var(--gold); }
+
+.fitcards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0; }
+.fitcard { border: 1px solid var(--line); border-radius: 12px; padding: 12px; text-align: center; }
+.fitcard .k { font-size: 12px; color: var(--muted); }
+.fitcard .v { font-weight: 800; margin-top: 2px; }
+.badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 999px; }
+.badge.ok { background: #e6f2ea; color: var(--ok); }
+.badge.warn { background: #f7edd8; color: var(--warn); }
+.badge.bad { background: #f6e2dd; color: var(--bad); }
+
+.alts { border: 1px solid var(--line); border-radius: 12px; padding: 4px 14px; margin: 12px 0; }
+.alts .row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+.alts .row:last-child { border-bottom: none; }
+.alts .row b { color: var(--ink); }
+
+.note { font-size: 12px; color: var(--muted); background: #fbf7ef; border-radius: 10px; padding: 10px 12px; margin-top: 12px; }
+.foot-actions { display: flex; gap: 10px; margin-top: 16px; }
+
+.error { color: var(--bad); font-size: 13px; margin-top: 8px; min-height: 18px; }
+.footer-links { margin-top: 8px; text-align: center; }
+.footer-links a { font-size: 12px; }
+
+</style>
+  </head>
+  <body>
+    <div class="shell">
+      <div class="topbar">
+        <div class="brand">عبايت<span>ي</span></div>
+        <nav class="navlinks">
+          
+          <a href="https://github.com/alraj46/testing/tree/main/abaya-size-engine">التوثيق</a>
+        </nav>
+      </div>
+
+      <!-- Mock product page: the "Find My Abaya Size" button lives here, exactly
+           as it would be embedded on a Shopify / Salla / Zid product page. -->
+      <div class="product">
+        <div class="gallery"><div class="abaya-illu">🧕🏻</div></div>
+        <div class="info">
+          <h1 id="p-name">عباية كلاسيك سوداء — قصّة مستقيمة</h1>
+          <div class="price">٣٤٩ ر.س</div>
+          <div class="meta" id="p-meta">قصّة مستقيمة · قماش غير مطّاطي</div>
+
+          <div class="selector">
+            <label for="abaya-select">اختاري الموديل</label>
+            <select id="abaya-select"></select>
+          </div>
+
+          <button class="btn btn-gold" id="open-widget">✨ حددي مقاسك بالذكاء الاصطناعي</button>
+          <button class="btn btn-primary btn-block addcart">أضيفي إلى السلة</button>
+          <div class="footer-links">
+            <a href="#" id="how-link">كيف يعمل؟ لا نحفظ صور جسمك — أرقام القياس فقط.</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- The widget: a self-contained overlay that can be dropped into any store -->
+    <div class="overlay" id="overlay">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-head">
+          <div class="title" id="modal-title">
+            مقاسك المثالي
+            <small id="modal-abaya">—</small>
+          </div>
+          <button class="close" id="close-widget" aria-label="إغلاق">×</button>
+        </div>
+        <div class="steps" id="steps">
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+        <div class="modal-body" id="widget-body"></div>
+      </div>
+    </div>
+
+    <!-- Shared, isomorphic engine: the exact code the backend runs. -->
+    <script>
+/*
+ * AbayaEngine — the AI Abaya Size Engine.
+ *
+ * This is the product's core IP: it does NOT rely on a generic size chart.
+ * It takes a customer's body measurements and compares them against the
+ * measurements of a *specific* abaya to recommend the best length (52–60),
+ * the best width (S/M/L), a comfort/fit read at chest and hips, a confidence
+ * score, and length alternatives (touches the floor / with heels / shorter).
+ *
+ * Pure, dependency-free, and isomorphic: it runs identically on the Node
+ * server and in the browser (customer widget + standalone demo), so the number
+ * a customer sees is exactly the number the merchant's backend computes.
+ *
+ * All body/garment measurements are in centimetres unless noted.
+ */
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) {
+    module.exports = factory();
+  } else {
+    root.AbayaEngine = factory();
+  }
+})(typeof self !== 'undefined' ? self : this, function () {
+  'use strict';
+
+  // ---------------------------------------------------------------------------
+  // Anthropometric constants used to fill in measurements the customer didn't
+  // provide. Ratios are relative to standing height and are deliberately
+  // conservative averages for adult women; any field derived this way is
+  // flagged as "estimated" and lowers the recommendation confidence.
+  // ---------------------------------------------------------------------------
+  var RATIOS = {
+    shoulderHeight: 0.818, // floor -> shoulder seam
+    shoulderWidth: 0.232, // biacromial (shoulder) breadth
+    sleeve: 0.335, // shoulder seam -> wrist
+    bust: 0.53, // fallback bust circumference (weak correlation; low confidence)
+    hip: 0.585 // fallback hip circumference (weak correlation; low confidence)
+  };
+
+  var HEEL_CM = 6; // assumed heel height when "with heels" is chosen
+  var HEM_GAP = {
+    // desired gap between hem and floor for each preference (cm).
+    // negative => garment should be longer than shoulder height (puddle / heels).
+    standard: 2.5,
+    floor: 0,
+    heels: -HEEL_CM,
+    shorter: 9
+  };
+
+  var PREF_EASE = {
+    // preferred garment-minus-body ease (cm) around the chest for each fit.
+    // Abayas are loose garments, so even "slim" keeps generous ease.
+    slim: 14,
+    regular: 22,
+    oversized: 34
+  };
+
+  var STRETCH_ALLOWANCE = 6; // effective body reduction (cm) for stretch fabric
+
+  function round(n, d) {
+    var f = Math.pow(10, d || 0);
+    return Math.round(n * f) / f;
+  }
+  function clamp(n, lo, hi) {
+    return Math.max(lo, Math.min(hi, n));
+  }
+
+  // ---------------------------------------------------------------------------
+  // estimateMeasurements — normalise a raw input object into a complete
+  // measurement set, filling gaps from height and reporting what was estimated.
+  //
+  // input: { height, shoulder?, bust?, hip?, sleeve? }  (cm)
+  // returns: { measurements: {...}, estimated: [fieldNames], source }
+  // ---------------------------------------------------------------------------
+  function estimateMeasurements(input) {
+    input = input || {};
+    var estimated = [];
+    var height = num(input.height);
+    if (!height) {
+      throw new Error('height is required to estimate measurements');
+    }
+
+    function pick(field, ratio) {
+      var v = num(input[field]);
+      if (v) return v;
+      estimated.push(field);
+      return round(height * ratio, 1);
+    }
+
+    var measurements = {
+      height: round(height, 1),
+      shoulder: pick('shoulder', RATIOS.shoulderWidth),
+      bust: pick('bust', RATIOS.bust),
+      hip: pick('hip', RATIOS.hip),
+      sleeve: pick('sleeve', RATIOS.sleeve)
+    };
+
+    return {
+      measurements: measurements,
+      estimated: estimated,
+      source: input.source || 'manual'
+    };
+  }
+
+  // ---------------------------------------------------------------------------
+  // Length selection — choose the abaya length option (52…60) whose garment
+  // length best reaches the customer's floor given the hem preference.
+  // ---------------------------------------------------------------------------
+  function scoreLengths(measurements, abaya, prefs) {
+    var shoulderHeight = measurements.height * RATIOS.shoulderHeight;
+    var gap = HEM_GAP[prefs.hem] != null ? HEM_GAP[prefs.hem] : HEM_GAP.standard;
+    // Ideal garment length so the hem sits `gap` cm off the floor.
+    var ideal = shoulderHeight - gap;
+
+    return (abaya.lengths || [])
+      .map(function (opt) {
+        var diff = opt.garmentLength - ideal; // + => too long (puddles), - => too short
+        // Too-short is worse than slightly-long for an abaya, so weight it harder.
+        var penalty = diff >= 0 ? diff : Math.abs(diff) * 1.6;
+        return {
+          size: opt.size,
+          garmentLength: opt.garmentLength,
+          diff: round(diff, 1),
+          penalty: penalty
+        };
+      })
+      .sort(function (a, b) {
+        return a.penalty - b.penalty;
+      });
+  }
+
+  // ---------------------------------------------------------------------------
+  // Width selection — choose S/M/L by matching garment ease to the customer's
+  // fit preference, accounting for stretch fabric. Ease is measured at the
+  // tightest relevant point (max of chest and hip demand).
+  // ---------------------------------------------------------------------------
+  function scoreWidths(measurements, abaya, prefs) {
+    var stretch = abaya.fabric === 'stretch' ? STRETCH_ALLOWANCE : 0;
+    var bodyChest = measurements.bust - stretch;
+    var bodyHip = measurements.hip - stretch;
+    var target = PREF_EASE[prefs.fit] != null ? PREF_EASE[prefs.fit] : PREF_EASE.regular;
+
+    return (abaya.widths || [])
+      .map(function (opt) {
+        var chestEase = opt.chest - bodyChest;
+        var hipEase = opt.hip - bodyHip;
+        // The garment must physically fit: negative ease anywhere is disqualifying-ish.
+        var minEase = Math.min(chestEase, hipEase);
+        var refEase = minEase; // fit is governed by the tightest point
+        var penalty = Math.abs(refEase - target);
+        if (minEase < 4) penalty += (4 - minEase) * 4; // heavy penalty for too tight
+        return {
+          size: opt.size,
+          chestEase: round(chestEase, 1),
+          hipEase: round(hipEase, 1),
+          minEase: round(minEase, 1),
+          penalty: penalty
+        };
+      })
+      .sort(function (a, b) {
+        return a.penalty - b.penalty;
+      });
+  }
+
+  function easeToComfort(ease) {
+    if (ease < 4) return { key: 'tight', label: 'ضيّق' };
+    if (ease < 12) return { key: 'snug', label: 'مناسب بحدود' };
+    if (ease < 26) return { key: 'comfortable', label: 'مريح' };
+    if (ease < 40) return { key: 'loose', label: 'واسع قليلًا' };
+    return { key: 'very_loose', label: 'واسع' };
+  }
+
+  // Confidence: starts high, penalised by measurement fit and by estimated inputs.
+  function computeConfidence(bestLength, bestWidth, estimated, hasScan) {
+    var score = 100;
+    // Length closeness: every cm off the ideal hem costs a little.
+    score -= clamp(Math.abs(bestLength.diff) * 1.1, 0, 22);
+    // Width appropriateness.
+    score -= clamp(bestWidth.penalty * 0.9, 0, 24);
+    // Each estimated (not measured) body value reduces trust.
+    // bust/hip drive fit most, so they cost more than shoulder/sleeve.
+    (estimated || []).forEach(function (f) {
+      if (f === 'bust' || f === 'hip') score -= 9;
+      else score -= 4;
+    });
+    // A real scan (front+side) is more reliable than typed numbers.
+    if (hasScan) score += 4;
+    return clamp(Math.round(score), 40, 99);
+  }
+
+  // ---------------------------------------------------------------------------
+  // recommend — the main entry point.
+  //
+  //   recommend(measurements, abaya, prefs?)
+  //
+  // measurements: { height, shoulder, bust, hip, sleeve, _estimated?, _source? }
+  // abaya:        a catalog item (see catalog.js for shape)
+  // prefs:        { hem: 'standard'|'floor'|'heels'|'shorter', fit: 'slim'|'regular'|'oversized' }
+  //
+  // returns a structured recommendation object ready to render.
+  // ---------------------------------------------------------------------------
+  function recommend(measurements, abaya, prefs) {
+    if (!measurements || !measurements.height) {
+      throw new Error('measurements.height is required');
+    }
+    if (!abaya || !abaya.lengths || !abaya.widths) {
+      throw new Error('abaya must include lengths[] and widths[]');
+    }
+    prefs = prefs || {};
+    prefs.hem = prefs.hem || 'standard';
+    prefs.fit = prefs.fit || abaya.fitType || 'regular';
+
+    var estimated = measurements._estimated || [];
+    var hasScan = (measurements._source || '') === 'scan';
+
+    var lengths = scoreLengths(measurements, abaya, prefs);
+    var widths = scoreWidths(measurements, abaya, prefs);
+    var bestLength = lengths[0];
+    var bestWidth = widths[0];
+
+    var chestComfort = easeToComfort(bestWidth.chestEase);
+    var hipComfort = easeToComfort(bestWidth.hipEase);
+    var confidence = computeConfidence(bestLength, bestWidth, estimated, hasScan);
+
+    // Length alternatives for the common "what if" questions.
+    var byPref = {};
+    ['floor', 'heels', 'shorter'].forEach(function (hem) {
+      var scored = scoreLengths(measurements, abaya, { hem: hem });
+      byPref[hem] = scored[0] ? scored[0].size : bestLength.size;
+    });
+
+    return {
+      abayaId: abaya.id,
+      abayaName: abaya.name,
+      recommended: {
+        length: bestLength.size,
+        width: bestWidth.size
+      },
+      confidence: confidence,
+      fit: {
+        chest: { ease: bestWidth.chestEase, comfort: chestComfort },
+        hip: { ease: bestWidth.hipEase, comfort: hipComfort }
+      },
+      alternatives: {
+        touchesFloor: byPref.floor,
+        withHeels: byPref.heels,
+        shorter: byPref.shorter
+      },
+      basis: {
+        measurements: {
+          height: measurements.height,
+          shoulder: measurements.shoulder,
+          bust: measurements.bust,
+          hip: measurements.hip,
+          sleeve: measurements.sleeve
+        },
+        estimatedFields: estimated,
+        source: measurements._source || 'manual'
+      },
+      // full ranking for debugging / merchant analytics
+      ranking: { lengths: lengths, widths: widths }
+    };
+  }
+
+  function num(v) {
+    if (v === null || v === undefined || v === '') return 0;
+    var n = parseFloat(v);
+    return isFinite(n) && n > 0 ? n : 0;
+  }
+
+  return {
+    estimateMeasurements: estimateMeasurements,
+    recommend: recommend,
+    // exposed for testing / tuning
+    _internals: {
+      RATIOS: RATIOS,
+      PREF_EASE: PREF_EASE,
+      HEM_GAP: HEM_GAP,
+      easeToComfort: easeToComfort,
+      scoreLengths: scoreLengths,
+      scoreWidths: scoreWidths
+    }
+  };
+});
+
+
+/*
+ * Measurement providers — the seam between the Abaya Size Engine and however
+ * the customer's body measurements are obtained.
+ *
+ * The engine only ever consumes NUMBERS (height, shoulder, bust, hip, sleeve).
+ * A provider's whole job is to turn some input into those numbers. This keeps
+ * the sizing IP independent of any single scanning vendor, and — importantly —
+ * lets image processing happen wherever the vendor requires while the rest of
+ * the system only touches numeric measurements.
+ *
+ * Providers implemented here:
+ *   - 'manual'   : the customer typed measurements (gaps filled from height).
+ *   - 'estimate' : only height (+ maybe bust/hip) given; the rest is estimated.
+ *   - 'scan'     : DEMO simulator that mimics a mobile body-scan vendor by
+ *                  deriving plausible measurements from height on-device.
+ *   - 'vendor'   : stub showing exactly where a real API (3DLOOK / NetVirta)
+ *                  is wired in. It throws until configured — by design.
+ *
+ * PRIVACY: no provider here uploads or stores a body image. The 'scan'
+ * simulator runs purely on the given numbers; a real vendor integration should
+ * be configured to return measurements and discard imagery per its policy.
+ */
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) {
+    module.exports = factory(require('./engine'));
+  } else {
+    root.AbayaProviders = factory(root.AbayaEngine);
+  }
+})(typeof self !== 'undefined' ? self : this, function (Engine) {
+  'use strict';
+
+  function manual(input) {
+    var r = Engine.estimateMeasurements(Object.assign({}, input, { source: 'manual' }));
+    return finalize(r);
+  }
+
+  function estimate(input) {
+    var r = Engine.estimateMeasurements(Object.assign({}, input, { source: 'estimate' }));
+    return finalize(r);
+  }
+
+  // Deterministic pseudo-variance from a seed so the demo scan feels "measured"
+  // (slightly different per person) without Math.random making tests flaky.
+  function jitter(seed, spread) {
+    var x = Math.sin(seed) * 10000;
+    return (x - Math.floor(x) - 0.5) * 2 * spread; // in [-spread, +spread]
+  }
+
+  // Simulate a mobile body scan: front + side photos would yield a body model;
+  // here we synthesise believable measurements from height and an optional
+  // shape hint. Marked source:'scan' with nothing "estimated" (it's "measured").
+  function scan(input) {
+    input = input || {};
+    var height = parseFloat(input.height);
+    if (!(height > 0)) throw new Error('height is required for the scan simulator');
+    var seed = height + (input.seed || 0);
+    var R = Engine._internals.RATIOS;
+    var measurements = {
+      height: Math.round(height * 10) / 10,
+      shoulder: round1(height * R.shoulderWidth + jitter(seed + 1, 1.2)),
+      bust: round1(height * R.bust + jitter(seed + 2, 6)),
+      hip: round1(height * R.hip + jitter(seed + 3, 6)),
+      sleeve: round1(height * R.sleeve + jitter(seed + 4, 1.5))
+    };
+    return { measurements: attach(measurements, [], 'scan'), estimated: [], source: 'scan' };
+  }
+
+  // Real vendor integration point (3DLOOK Mobile Tailor, NetVirta, etc.).
+  // Wire the vendor SDK/API here; it must resolve to the same measurement shape.
+  function vendor() {
+    throw new Error(
+      'vendor provider not configured — plug a real body-measurement API ' +
+        '(e.g. 3DLOOK / NetVirta) in shared/providers.js:vendor()'
+    );
+  }
+
+  function finalize(r) {
+    return {
+      measurements: attach(r.measurements, r.estimated, r.source),
+      estimated: r.estimated,
+      source: r.source
+    };
+  }
+
+  // Stamp provenance onto the measurements object the engine will read.
+  function attach(m, estimated, source) {
+    m._estimated = estimated || [];
+    m._source = source || 'manual';
+    return m;
+  }
+
+  function round1(n) {
+    return Math.round(n * 10) / 10;
+  }
+
+  var providers = { manual: manual, estimate: estimate, scan: scan, vendor: vendor };
+
+  function get(name) {
+    var p = providers[name];
+    if (!p) throw new Error('unknown measurement provider: ' + name);
+    return p;
+  }
+
+  return { get: get, providers: providers };
+});
+
+
+/*
+ * Sample abaya catalog.
+ *
+ * Each abaya carries its OWN measurements — this is what lets the engine
+ * recommend per-garment instead of against a generic size chart.
+ *
+ * length options:  { size: 52|54|56|58|60, garmentLength }  garmentLength =
+ *                  shoulder-seam-to-hem in cm (what actually decides floor reach).
+ * width options:   { size: 'S'|'M'|'L', chest, hip }  = finished garment
+ *                  circumference in cm (ease is garment - body).
+ * fabric:          'stretch' | 'non-stretch'  (stretch adds fit tolerance).
+ * cut:             'straight' | 'a-line' | 'bisht' (informational).
+ * fitType:         default fit intent if the customer states no preference.
+ */
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory();
+  else root.AbayaSampleCatalog = factory();
+})(typeof self !== 'undefined' ? self : this, function () {
+  'use strict';
+
+  // A standard length ladder used by several models (garmentLength in cm).
+  function ladder(base) {
+    return [52, 54, 56, 58, 60].map(function (s, i) {
+      return { size: s, garmentLength: base + i * 5 };
+    });
+  }
+
+  return [
+    {
+      id: 'classic-black-straight',
+      name: 'عباية كلاسيك سوداء — قصّة مستقيمة',
+      cut: 'straight',
+      fabric: 'non-stretch',
+      fitType: 'regular',
+      color: '#111111',
+      lengths: ladder(128), // 128,133,138,143,148
+      widths: [
+        { size: 'S', chest: 108, hip: 116 },
+        { size: 'M', chest: 120, hip: 128 },
+        { size: 'L', chest: 132, hip: 140 }
+      ]
+    },
+    {
+      id: 'aline-crepe',
+      name: 'عباية كريب — قصّة A-Line',
+      cut: 'a-line',
+      fabric: 'non-stretch',
+      fitType: 'regular',
+      color: '#2b2b3a',
+      lengths: ladder(130),
+      widths: [
+        { size: 'S', chest: 112, hip: 128 },
+        { size: 'M', chest: 124, hip: 142 },
+        { size: 'L', chest: 138, hip: 156 }
+      ]
+    },
+    {
+      id: 'bisht-formal',
+      name: 'عباية بشت — رسمية واسعة',
+      cut: 'bisht',
+      fabric: 'non-stretch',
+      fitType: 'oversized',
+      color: '#1a1a1a',
+      lengths: ladder(132),
+      widths: [
+        { size: 'S', chest: 124, hip: 132 },
+        { size: 'M', chest: 138, hip: 146 },
+        { size: 'L', chest: 152, hip: 160 }
+      ]
+    },
+    {
+      id: 'jersey-stretch',
+      name: 'عباية جيرسيه — قماش مطّاطي',
+      cut: 'straight',
+      fabric: 'stretch',
+      fitType: 'slim',
+      color: '#22222a',
+      lengths: ladder(126),
+      widths: [
+        { size: 'S', chest: 100, hip: 110 },
+        { size: 'M', chest: 112, hip: 122 },
+        { size: 'L', chest: 124, hip: 134 }
+      ]
+    }
+  ];
+});
+
+
+/*
+ * Abaya Size Engine — customer widget.
+ *
+ * A self-contained flow that mounts into any storefront. It runs the SAME
+ * engine the backend runs (loaded via <script>), so sizing happens on-device:
+ * for the scan mode, imagery would be processed by the body-scan vendor and
+ * only numeric measurements reach this code — no body image is uploaded here.
+ *
+ * Optional server mode: set window.ABAYA_API = 'https://.../api' to route the
+ * final recommendation through POST /api/recommend instead of computing locally.
+ */
+(function () {
+  'use strict';
+
+  var Engine = window.AbayaEngine;
+  var Providers = window.AbayaProviders;
+  var CATALOG = window.AbayaSampleCatalog || [];
+
+  var overlay = document.getElementById('overlay');
+  var body = document.getElementById('widget-body');
+  var stepsEl = document.getElementById('steps');
+  var modalAbaya = document.getElementById('modal-abaya');
+  var select = document.getElementById('abaya-select');
+
+  // Populate product selector.
+  CATALOG.forEach(function (a) {
+    var o = document.createElement('option');
+    o.value = a.id;
+    o.textContent = a.name;
+    select.appendChild(o);
+  });
+
+  function currentAbaya() {
+    return CATALOG.find(function (a) { return a.id === select.value; }) || CATALOG[0];
+  }
+
+  var CUTS = { straight: 'قصّة مستقيمة', 'a-line': 'قصّة A-Line', bisht: 'بشت' };
+  var FABRICS = { stretch: 'قماش مطّاطي', 'non-stretch': 'قماش غير مطّاطي' };
+
+  function syncProductInfo() {
+    var a = currentAbaya();
+    document.getElementById('p-name').textContent = a.name;
+    document.getElementById('p-meta').textContent =
+      (CUTS[a.cut] || a.cut) + ' · ' + (FABRICS[a.fabric] || a.fabric);
+  }
+  select.addEventListener('change', syncProductInfo);
+  syncProductInfo();
+
+  // ---- widget state ----------------------------------------------------------
+  var state = { step: 1, mode: 'scan', input: {}, prefs: { hem: 'standard', fit: null } };
+
+  function open() {
+    state = { step: 1, mode: 'scan', input: {}, prefs: { hem: 'standard', fit: null } };
+    modalAbaya.textContent = currentAbaya().name;
+    overlay.classList.add('open');
+    render();
+  }
+  function close() { overlay.classList.remove('open'); }
+
+  document.getElementById('open-widget').addEventListener('click', open);
+  document.getElementById('close-widget').addEventListener('click', close);
+  document.getElementById('how-link').addEventListener('click', function (e) { e.preventDefault(); open(); });
+  overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
+
+  function setSteps() {
+    var dots = stepsEl.children;
+    for (var i = 0; i < dots.length; i++) {
+      dots[i].className = 'dot' + (i + 1 < state.step ? ' done' : i + 1 === state.step ? ' active' : '');
+    }
+  }
+
+  // ---- rendering -------------------------------------------------------------
+  function render() {
+    setSteps();
+    if (state.step === 1) return renderMeasure();
+    if (state.step === 2) return renderPrefs();
+    if (state.step === 3) return renderResult();
+  }
+
+  function renderMeasure() {
+    body.innerHTML =
+      '<div class="h-step">١ — قياساتك</div>' +
+      '<div class="sub">اختاري طريقة القياس. لا نحفظ أي صورة — نستخرج الأرقام فقط.</div>' +
+      '<div class="mode-tabs">' +
+        tab('scan', '📷 مسح بالكاميرا') +
+        tab('manual', '✍️ إدخال يدوي') +
+        tab('estimate', '⚡ تقدير سريع') +
+      '</div>' +
+      '<div id="mode-body"></div>' +
+      '<div class="error" id="err"></div>';
+
+    Array.prototype.forEach.call(body.querySelectorAll('.mode-tabs button'), function (b) {
+      b.addEventListener('click', function () { state.mode = b.dataset.mode; renderMeasure(); });
+    });
+    renderModeBody();
+  }
+
+  function tab(mode, label) {
+    return '<button data-mode="' + mode + '" class="' + (state.mode === mode ? 'active' : '') + '">' + label + '</button>';
+  }
+
+  function heightField() {
+    return (
+      '<div class="field"><label for="f-height">طولك (سم)</label>' +
+      '<input type="number" id="f-height" min="120" max="210" placeholder="مثال: 163" value="' +
+      (state.input.height || '') + '" /></div>'
+    );
+  }
+
+  function renderModeBody() {
+    var el = document.getElementById('mode-body');
+    if (state.mode === 'manual') {
+      el.innerHTML =
+        heightField() +
+        '<div class="grid2" style="margin-top:12px">' +
+          numField('shoulder', 'عرض الكتف (سم)', 'اختياري') +
+          numField('bust', 'محيط الصدر (سم)', 'اختياري') +
+          numField('hip', 'محيط الورك (سم)', 'اختياري') +
+          numField('sleeve', 'طول الذراع (سم)', 'اختياري') +
+        '</div>' +
+        nextButton('التالي');
+      wireInputs(el);
+    } else if (state.mode === 'estimate') {
+      el.innerHTML =
+        heightField() +
+        '<div class="grid2" style="margin-top:12px">' +
+          numField('bust', 'محيط الصدر (سم)', 'اختياري — يحسّن الدقة') +
+          numField('hip', 'محيط الورك (سم)', 'اختياري — يحسّن الدقة') +
+        '</div>' +
+        '<div class="note">التقدير السريع يستنتج باقي القياسات من طولك. لأعلى دقة استخدمي المسح بالكاميرا.</div>' +
+        nextButton('التالي');
+      wireInputs(el);
+    } else {
+      el.innerHTML =
+        heightField() +
+        '<div class="scanner" id="scanner">' +
+          '<div class="scan-line"></div>' +
+          '<div class="silhouette" id="sil">🧍🏻‍♀️</div>' +
+          '<div class="turn" id="scan-turn">ضعي الجوال أمامك على مستوى الخصر</div>' +
+          '<div class="hint" id="scan-hint">أدخلي طولك ثم ابدئي المسح</div>' +
+        '</div>' +
+        '<button class="btn btn-gold" id="scan-btn" style="margin-top:14px">ابدئي المسح</button>';
+      wireInputs(el);
+      document.getElementById('scan-btn').addEventListener('click', runScan);
+    }
+  }
+
+  function numField(name, label, hint) {
+    return (
+      '<div class="field"><label for="f-' + name + '">' + label + '</label>' +
+      '<input type="number" id="f-' + name + '" min="20" max="200" placeholder="' + (hint || '') + '" value="' +
+      (state.input[name] || '') + '" /></div>'
+    );
+  }
+
+  function wireInputs(scope) {
+    Array.prototype.forEach.call(scope.querySelectorAll('input[type=number]'), function (inp) {
+      var key = inp.id.replace('f-', '');
+      inp.addEventListener('input', function () {
+        var v = parseFloat(inp.value);
+        if (isFinite(v) && v > 0) state.input[key] = v; else delete state.input[key];
+      });
+    });
+    var nb = scope.querySelector('#next-btn');
+    if (nb) nb.addEventListener('click', function () {
+      if (!state.input.height) return showErr('الرجاء إدخال طولك أولًا.');
+      state.step = 2; render();
+    });
+  }
+
+  function nextButton(label) {
+    return '<button class="btn btn-gold" id="next-btn" style="margin-top:16px">' + label + '</button>';
+  }
+
+  function showErr(msg) {
+    var e = document.getElementById('err');
+    if (e) e.textContent = msg || '';
+  }
+
+  // Staged scan simulator: front photo -> turn 90° -> side photo -> analyzing.
+  function runScan() {
+    if (!state.input.height) return showErr('أدخلي طولك قبل بدء المسح.');
+    showErr('');
+    var scanner = document.getElementById('scanner');
+    var turn = document.getElementById('scan-turn');
+    var hint = document.getElementById('scan-hint');
+    var sil = document.getElementById('sil');
+    var btn = document.getElementById('scan-btn');
+    btn.disabled = true;
+    scanner.classList.add('scanning');
+
+    var stages = [
+      { t: 'صورة أمامية 📸', h: 'ابقي ثابتة…', s: '🧍🏻‍♀️', ms: 1200 },
+      { t: 'استديري ٩٠° ↻', h: 'الجانب الآن', s: '🚶🏻‍♀️', ms: 1100 },
+      { t: 'صورة جانبية 📸', h: 'ابقي ثابتة…', s: '🧍🏻‍♀️', ms: 1200 },
+      { t: 'جاري تحليل المقاسات…', h: 'لا يتم حفظ الصور', s: '✨', ms: 1200 }
+    ];
+    var i = 0;
+    (function nextStage() {
+      if (i >= stages.length) {
+        // Vendor would return measurements here; the simulator derives them.
+        finishMeasureAndAdvance();
+        return;
+      }
+      var st = stages[i++];
+      turn.textContent = st.t;
+      hint.textContent = st.h;
+      sil.textContent = st.s;
+      setTimeout(nextStage, st.ms);
+    })();
+  }
+
+  function finishMeasureAndAdvance() {
+    state.step = 2;
+    render();
+  }
+
+  function renderPrefs() {
+    body.innerHTML =
+      '<div class="h-step">٢ — تفضيلاتك</div>' +
+      '<div class="sub">علشان نضبط الطول والقصّة على ذوقك.</div>' +
+      '<label class="field"><small>الطول المفضّل</small></label>' +
+      '<div class="chip-row" id="hem">' +
+        chip('hem', 'standard', 'قياسي') +
+        chip('hem', 'floor', 'يلامس الأرض') +
+        chip('hem', 'heels', 'مع كعب') +
+        chip('hem', 'shorter', 'أقصر قليلًا') +
+      '</div>' +
+      '<label class="field" style="margin-top:14px"><small>القصّة على الجسم</small></label>' +
+      '<div class="chip-row" id="fit">' +
+        chip('fit', 'slim', 'ضيّقة') +
+        chip('fit', 'regular', 'عادية') +
+        chip('fit', 'oversized', 'واسعة') +
+      '</div>' +
+      '<div class="foot-actions">' +
+        '<button class="btn btn-ghost" id="back-btn">رجوع</button>' +
+        '<button class="btn btn-gold btn-block" id="show-btn">أظهري مقاسي ✨</button>' +
+      '</div>' +
+      '<div class="error" id="err"></div>';
+
+    wireChips('hem');
+    wireChips('fit');
+    document.getElementById('back-btn').addEventListener('click', function () { state.step = 1; render(); });
+    document.getElementById('show-btn').addEventListener('click', compute);
+  }
+
+  function chip(group, value, label) {
+    var active = state.prefs[group] === value ? ' active' : '';
+    return '<button class="chip' + active + '" data-group="' + group + '" data-value="' + value + '">' + label + '</button>';
+  }
+  function wireChips(group) {
+    Array.prototype.forEach.call(document.querySelectorAll('#' + group + ' .chip'), function (c) {
+      c.addEventListener('click', function () {
+        state.prefs[group] = c.dataset.value;
+        wireChipsRefresh(group);
+      });
+    });
+  }
+  function wireChipsRefresh(group) {
+    Array.prototype.forEach.call(document.querySelectorAll('#' + group + ' .chip'), function (c) {
+      c.classList.toggle('active', c.dataset.value === state.prefs[group]);
+    });
+  }
+
+  // ---- compute ---------------------------------------------------------------
+  function compute() {
+    var abaya = currentAbaya();
+    var prefs = { hem: state.prefs.hem || 'standard', fit: state.prefs.fit || abaya.fitType };
+
+    body.innerHTML =
+      '<div class="analyzing"><div class="spinner"></div>' +
+      '<div>جاري حساب مقاسك على «' + abaya.name + '»…</div></div>';
+
+    setTimeout(function () {
+      var apiBase = window.ABAYA_API;
+      if (apiBase) {
+        computeViaApi(apiBase, abaya, prefs);
+      } else {
+        try {
+          var measured = Providers.get(state.mode)(state.input);
+          var rec = Engine.recommend(measured.measurements, abaya, prefs);
+          state.recommendation = rec;
+          state.step = 3;
+          render();
+        } catch (e) {
+          state.step = 2; render();
+          showErr(e.message || 'تعذّر حساب المقاس.');
+        }
+      }
+    }, 700);
+  }
+
+  function computeViaApi(apiBase, abaya, prefs) {
+    fetch(apiBase.replace(/\/$/, '') + '/recommend', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ abayaId: abaya.id, provider: state.mode, input: state.input, prefs: prefs })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d.error || d.errors) throw new Error(d.error || d.errors.join('، '));
+        state.recommendation = d.recommendation;
+        state.step = 3; render();
+      })
+      .catch(function (e) { state.step = 2; render(); showErr(e.message); });
+  }
+
+  // ---- result ----------------------------------------------------------------
+  var COMFORT_BADGE = {
+    tight: 'bad', snug: 'warn', comfortable: 'ok', loose: 'warn', very_loose: 'warn'
+  };
+
+  function renderResult() {
+    var r = state.recommendation;
+    var est = r.basis.estimatedFields || [];
+    var privacyNote =
+      r.basis.source === 'scan'
+        ? 'تم تحليل الصور على جهازك واستخراج الأرقام فقط — لم تُحفظ أي صورة.'
+        : est.length
+          ? 'تم تقدير بعض القياسات من طولك (' + est.length + '). للدقة القصوى استخدمي المسح بالكاميرا.'
+          : 'اعتمدنا القياسات التي أدخلتِها.';
+
+    body.innerHTML =
+      '<div class="result-hero">' +
+        '<div class="eyebrow">مقاسك المثالي لهذه العباية</div>' +
+        '<div class="size"><b>' + r.recommended.length + '</b></div>' +
+        '<div class="width">العرض: ' + r.recommended.width + '</div>' +
+      '</div>' +
+      '<div class="confidence">' +
+        '<div class="lbl"><span>دقة التوصية</span><b>' + r.confidence + '%</b></div>' +
+        '<div class="bar"><i style="width:' + r.confidence + '%"></i></div>' +
+      '</div>' +
+      '<div class="fitcards">' +
+        fitCard('عند الصدر', r.fit.chest) +
+        fitCard('عند الورك', r.fit.hip) +
+      '</div>' +
+      '<div class="alts">' +
+        altRow('لو تحبينها تلامس الأرض', r.alternatives.touchesFloor) +
+        altRow('لو تلبسينها مع كعب', r.alternatives.withHeels) +
+        altRow('لو تحبينها أقصر قليلًا', r.alternatives.shorter) +
+      '</div>' +
+      '<div class="note">🔒 ' + privacyNote + '</div>' +
+      '<div class="foot-actions">' +
+        '<button class="btn btn-ghost" id="again-btn">إعادة</button>' +
+        '<button class="btn btn-gold btn-block" id="pick-btn">اعتماد المقاس ' + r.recommended.length + ' / ' + r.recommended.width + '</button>' +
+      '</div>';
+
+    document.getElementById('again-btn').addEventListener('click', function () { state.step = 1; render(); });
+    document.getElementById('pick-btn').addEventListener('click', function () {
+      close();
+      alert('تم اختيار المقاس ' + r.recommended.length + ' — ' + r.recommended.width + ' ✨');
+    });
+  }
+
+  function fitCard(label, f) {
+    var badge = COMFORT_BADGE[f.comfort.key] || 'warn';
+    return (
+      '<div class="fitcard"><div class="k">' + label + '</div>' +
+      '<div class="v"><span class="badge ' + badge + '">' + f.comfort.label + '</span></div></div>'
+    );
+  }
+  function altRow(label, size) {
+    return '<div class="row"><span>' + label + '</span><b>' + size + '</b></div>';
+  }
+})();
+
+    </script>
+  </body>
+</html>

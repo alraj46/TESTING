@@ -1,0 +1,20 @@
+{
+  "name": "abaya-size-engine",
+  "version": "0.1.0",
+  "description": "AI Abaya Size Engine — per-garment size & fit recommendations for abaya stores (Shopify / Salla / Zid).",
+  "type": "commonjs",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "test": "node test/engine.test.js",
+    "build:standalone": "node scripts/build-standalone.js",
+    "smoke": "node scripts/smoke.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.22.2"
+  }
+}

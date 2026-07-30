@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>عبايتي — متجر تجريبي · AI Abaya Size Engine</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <div class="topbar">
+        <div class="brand">عبايت<span>ي</span></div>
+        <nav class="navlinks">
+          <a href="/merchant.html">لوحة التاجر</a>
+          <a href="/README">التوثيق</a>
+        </nav>
+      </div>
+
+      <!-- Mock product page: the "Find My Abaya Size" button lives here, exactly
+           as it would be embedded on a Shopify / Salla / Zid product page. -->
+      <div class="product">
+        <div class="gallery"><div class="abaya-illu">🧕🏻</div></div>
+        <div class="info">
+          <h1 id="p-name">عباية كلاسيك سوداء — قصّة مستقيمة</h1>
+          <div class="price">٣٤٩ ر.س</div>
+          <div class="meta" id="p-meta">قصّة مستقيمة · قماش غير مطّاطي</div>
+
+          <div class="selector">
+            <label for="abaya-select">اختاري الموديل</label>
+            <select id="abaya-select"></select>
+          </div>
+
+          <button class="btn btn-gold" id="open-widget">✨ حددي مقاسك بالذكاء الاصطناعي</button>
+          <button class="btn btn-primary btn-block addcart">أضيفي إلى السلة</button>
+          <div class="footer-links">
+            <a href="#" id="how-link">كيف يعمل؟ لا نحفظ صور جسمك — أرقام القياس فقط.</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- The widget: a self-contained overlay that can be dropped into any store -->
+    <div class="overlay" id="overlay">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-head">
+          <div class="title" id="modal-title">
+            مقاسك المثالي
+            <small id="modal-abaya">—</small>
+          </div>
+          <button class="close" id="close-widget" aria-label="إغلاق">×</button>
+        </div>
+        <div class="steps" id="steps">
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+        <div class="modal-body" id="widget-body"></div>
+      </div>
+    </div>
+
+    <!-- Shared, isomorphic engine: the exact code the backend runs. -->
+    <script src="/shared/engine.js"></script>
+    <script src="/shared/providers.js"></script>
+    <script src="/shared/sample-catalog.js"></script>
+    <script src="/widget.js"></script>
+  </body>
+</html>

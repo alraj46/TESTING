@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>لوحة التاجر — كتالوج العبايات</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      .panel { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; margin-bottom: 20px; }
+      table { width: 100%; border-collapse: collapse; font-size: 14px; }
+      th, td { text-align: right; padding: 10px 8px; border-bottom: 1px solid var(--line); }
+      th { color: var(--muted); font-weight: 700; font-size: 12px; }
+      .tag { font-size: 11px; padding: 2px 8px; border-radius: 999px; background: #fbf7ef; color: var(--gold); }
+      .row-actions button { margin-inline-start: 6px; }
+      .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+      .form-grid .full { grid-column: 1 / -1; }
+      textarea { width: 100%; min-height: 84px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; font: inherit; direction: ltr; }
+      label { display: block; font-size: 13px; color: var(--ink-soft); margin-bottom: 6px; }
+      h2 { font-size: 18px; }
+      .hint { color: var(--muted); font-size: 12px; }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <div class="topbar">
+        <div class="brand">لوحة التاجر — <span>الكتالوج</span></div>
+        <nav class="navlinks"><a href="/">المتجر التجريبي</a></nav>
+      </div>
+
+      <div class="panel">
+        <h2>عباياتك</h2>
+        <p class="hint">لكل عباية قياساتها الخاصة — وهذا ما يجعل التوصية دقيقة لكل موديل، لا مجرّد جدول مقاسات عام.</p>
+        <table>
+          <thead>
+            <tr><th>الموديل</th><th>القصّة</th><th>القماش</th><th>الأطوال</th><th>العروض</th><th></th></tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h2 id="form-title">إضافة عباية جديدة</h2>
+        <div class="form-grid">
+          <div><label>اسم الموديل</label><input type="text" id="f-name" placeholder="عباية كريب سوداء" /></div>
+          <div><label>المعرّف (id) — اختياري</label><input type="text" id="f-id" placeholder="crepe-black" dir="ltr" /></div>
+          <div>
+            <label>القصّة</label>
+            <select id="f-cut">
+              <option value="straight">مستقيمة</option>
+              <option value="a-line">A-Line</option>
+              <option value="bisht">بشت</option>
+            </select>
+          </div>
+          <div>
+            <label>القماش</label>
+            <select id="f-fabric">
+              <option value="non-stretch">غير مطّاطي</option>
+              <option value="stretch">مطّاطي</option>
+            </select>
+          </div>
+          <div>
+            <label>القصّة الافتراضية على الجسم</label>
+            <select id="f-fit">
+              <option value="slim">ضيّقة</option>
+              <option value="regular" selected>عادية</option>
+              <option value="oversized">واسعة</option>
+            </select>
+          </div>
+          <div></div>
+          <div class="full">
+            <label>الأطوال (JSON) — كل عنصر { "size": رقم, "garmentLength": سم من الكتف للأسفل }</label>
+            <textarea id="f-lengths"></textarea>
+          </div>
+          <div class="full">
+            <label>العروض (JSON) — كل عنصر { "size": "S/M/L", "chest": محيط العباية سم, "hip": محيط الورك سم }</label>
+            <textarea id="f-widths"></textarea>
+          </div>
+        </div>
+        <div class="foot-actions">
+          <button class="btn btn-ghost" id="reset-btn">تفريغ</button>
+          <button class="btn btn-gold btn-block" id="save-btn">حفظ</button>
+        </div>
+        <div class="error" id="err"></div>
+      </div>
+    </div>
+
+    <script src="/merchant.js"></script>
+  </body>
+</html>
