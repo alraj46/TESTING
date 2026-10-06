@@ -228,6 +228,7 @@ function renderTab(tabs) {
   State.tab = t.id;
   document.querySelectorAll('.tabbar button').forEach((b, i) => b.classList.toggle('active', tabs[i].id === t.id));
   const view = $('#view');
+  view.classList.toggle('full', !!t.full);
   view.innerHTML = '';
   view.appendChild(el('div', { class: 'center-spin' }, el('div', { class: 'spinner' })));
   t.render(view);
@@ -596,6 +597,38 @@ function statCard(num, lbl, cls) {
 }
 
 /* ============================================================
+   المدير — منصة الحج الذكية (صفحة مستقلة داخل إطار معزول)
+   ============================================================ */
+async function viewPlatform(view) {
+  loading(view);
+  let html;
+  try {
+    const res = await fetch('/api/platform', { headers: { Authorization: 'Bearer ' + State.token } });
+    if (res.status === 401) { doLogout(true); return; }
+    if (!res.ok) throw new Error('تعذّر تحميل المنصة');
+    html = await res.text();
+  } catch (e) { view.innerHTML = ''; view.appendChild(errorCard(e.message)); return; }
+
+  // sandbox بدون allow-same-origin: الصفحة لا تصل إلى localStorage أو رمز الجلسة
+  const frame = el('iframe', {
+    class: 'platform-frame',
+    title: 'منصة الحج الذكية',
+    sandbox: 'allow-scripts allow-popups',
+  });
+  frame.srcdoc = html;
+  view.innerHTML = '';
+  view.appendChild(frame);
+
+  const fit = () => {
+    if (!frame.isConnected) return window.removeEventListener('resize', fit);
+    const used = $('.app-header').offsetHeight + $('.tabbar').offsetHeight;
+    frame.style.height = Math.max(window.innerHeight - used, 320) + 'px';
+  };
+  fit();
+  window.addEventListener('resize', fit);
+}
+
+/* ============================================================
    المدير — إدارة البنود
    ============================================================ */
 async function viewManageCriteria(view) {
@@ -682,6 +715,7 @@ function renderApp() {
   if (State.user.role === 'manager') {
     shell([
       { id: 'dashboard', label: 'اللوحة', icon: '📊', render: viewDashboard },
+      { id: 'platform', label: 'منصة الحج', icon: '🕋', render: viewPlatform, full: true },
       { id: 'm-reports', label: 'البلاغات', icon: '📮', render: (v) => viewReportsList(v, { manager: true }) },
       { id: 'm-assess', label: 'التقييمات', icon: '📋', render: (v) => viewAssessmentsList(v, { manager: true }) },
       { id: 'criteria', label: 'البنود', icon: '⚙️', render: viewManageCriteria },

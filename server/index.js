@@ -18,6 +18,7 @@ app.use('/api/assessments', require('./routes/assessments'));
 app.use('/api/reports', require('./routes/reports'));
 app.use('/api/attachments', require('./routes/attachments'));
 app.use('/api/stats', require('./routes/stats'));
+app.use('/api/platform', require('./routes/platform'));
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
 

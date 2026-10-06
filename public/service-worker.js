@@ -1,7 +1,7 @@
 'use strict';
 
 // إصدار الكاش — غيّره عند تحديث ملفات الواجهة
-const CACHE = 'camp-app-v1';
+const CACHE = 'camp-app-v2';
 const APP_SHELL = [
   '/',
   '/index.html',

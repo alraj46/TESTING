@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🕋 منصة الحج الذكية — الراجحي 1447هـ</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;direction:rtl;background:#F5F4F0;color:#1a1a1a;min-height:100vh}
+:root{
+  --gold:#C8972A;--gold-l:#F5E6C0;--gold-d:#8B6419;
+  --green:#1A7A4A;--green-l:#E0F2EA;--green-d:#0F4D2E;
+  --blue:#1A5F8A;--blue-l:#E3F0FA;
+  --red:#C0392B;--red-l:#FDECEA;
+  --orange:#D4600A;--orange-l:#FDF0E3;
+  --purple:#6B3FA0;--purple-l:#F0E8FA;
+  --bg:#F5F4F0;--card:#fff;--border:#e0ddd5;--text2:#666;--text3:#999;
+}
+/* ========== SPLASH ========== */
+.splash{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:24px;padding:40px 20px;background:linear-gradient(135deg,#fdf8f0 0%,#f0f7f4 100%)}
+.logo-icon{font-size:68px;line-height:1}
+.logo-title{font-size:30px;font-weight:700;color:#1a1a1a}
+.logo-sub{font-size:14px;color:var(--text2);margin-top:4px;text-align:center}
+.logo-tag{display:inline-flex;align-items:center;gap:6px;background:var(--gold-l);color:var(--gold-d);font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;border:1px solid var(--gold);margin-top:6px}
+.splash-divider{width:1px;height:36px;background:#ddd}
+.splash-label{font-size:13px;color:var(--text2);font-weight:500}
+.splash-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;max-width:520px}
+.splash-card{background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:22px;cursor:pointer;transition:all .2s;text-align:right}
+.splash-card:hover{border-color:var(--gold);background:var(--gold-l);transform:translateY(-2px);box-shadow:0 8px 24px rgba(200,151,42,.15)}
+.splash-card i{font-size:30px;color:var(--gold);display:block;margin-bottom:8px}
+.splash-card-title{font-size:15px;font-weight:600;margin-bottom:5px}
+.splash-card-desc{font-size:12px;color:var(--text2);line-height:1.6}
+.proj-card{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:16px;cursor:pointer;transition:all .2s;width:100%;max-width:480px}
+.proj-card:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.08)}
+.proj-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:3px 10px;border-radius:20px;margin-bottom:8px;font-weight:600}
+.badge-active{background:var(--green-l);color:var(--green)}
+.proj-name{font-size:15px;font-weight:700;color:#1a1a1a}
+.proj-sub{font-size:12px;color:var(--text2);margin:4px 0 10px}
+.proj-prog{height:4px;background:#eee;border-radius:2px}
+.proj-prog-fill{height:100%;border-radius:2px;background:var(--gold)}
+.proj-pct{font-size:10px;color:var(--text3);margin-top:4px}
+/* ========== TOPBAR ========== */
+.main-app{display:none;flex:1;flex-direction:column;min-height:100vh}
+.topbar{display:flex;align-items:center;justify-content:space-between;background:#fff;border-bottom:1px solid var(--border);padding:11px 20px;position:sticky;top:0;z-index:100}
+.topbar-left{display:flex;align-items:center;gap:10px}
+.back-icon{cursor:pointer;color:var(--text2);font-size:20px;padding:4px;border-radius:8px;transition:background .15s}
+.back-icon:hover{background:#f0f0f0}
+.topbar-title{font-size:15px;font-weight:600}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.topbar-badge{display:inline-flex;align-items:center;gap:4px;font-size:12px;padding:4px 10px;border-radius:20px;font-weight:600;background:var(--green-l);color:var(--green)}
+/* ========== LAYOUT ========== */
+.body-wrap{display:flex;flex:1}
+.sidebar{width:210px;min-width:210px;background:#fff;border-left:1px solid var(--border);display:flex;flex-direction:column;min-height:calc(100vh - 57px)}
+.sidebar-header{padding:13px 16px 14px;border-bottom:1px solid var(--border)}
+.sidebar-logo{font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px}
+.sidebar-proj-info{font-size:11px;color:var(--text2);margin-top:2px}
+.nav-section{font-size:10px;color:var(--text3);padding:10px 16px 4px;font-weight:700;letter-spacing:.6px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 16px;cursor:pointer;font-size:13px;color:var(--text2);transition:all .12s;border-right:3px solid transparent}
+.nav-item:hover{background:#f8f7f4;color:#1a1a1a}
+.nav-item.active{color:var(--gold-d);font-weight:600;border-right-color:var(--gold);background:var(--gold-l)}
+.nav-item i{font-size:15px;min-width:16px}
+.sidebar-footer{margin-top:auto;padding:12px 16px;border-top:1px solid var(--border)}
+.back-btn{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);cursor:pointer;padding:5px 0}
+.back-btn:hover{color:#1a1a1a}
+.content{flex:1;background:var(--bg);padding:20px;overflow-y:auto}
+/* ========== BUTTONS ========== */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:8px;font-size:12px;cursor:pointer;border:1px solid var(--border);background:#fff;color:#1a1a1a;transition:all .12s;font-family:inherit}
+.btn:hover{background:#f5f4f0}
+.btn-primary{background:var(--gold);border-color:var(--gold);color:#fff;font-weight:600}
+.btn-primary:hover{background:var(--gold-d)}
+.btn-sm{padding:5px 10px;font-size:11px}
+/* ========== CARDS ========== */
+.card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px}
+.card:last-child{margin-bottom:0}
+.card-title{font-size:13px;font-weight:700;color:#1a1a1a;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.page-header{margin-bottom:16px}
+.page-header h2{font-size:19px;font-weight:700}
+.page-header p{font-size:12px;color:var(--text2);margin-top:3px}
+/* ========== STATS ========== */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:14px}
+.stats-row-3{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:14px}
+.stat-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px}
+.stat-label{font-size:11px;color:var(--text2);margin-bottom:5px}
+.stat-val{font-size:22px;font-weight:700}
+.stat-sub{font-size:11px;color:var(--text2);margin-top:2px;display:flex;align-items:center;gap:3px;flex-wrap:wrap}
+.stat-up{color:var(--green)}.stat-down{color:var(--red)}
+/* ========== RAG ========== */
+.rag-g{color:var(--green);font-weight:700}.rag-y{color:var(--gold-d);font-weight:700}.rag-r{color:var(--red);font-weight:700}
+.rag-badge-g{background:var(--green-l);color:var(--green);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700}
+.rag-badge-y{background:var(--gold-l);color:var(--gold-d);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700}
+.rag-badge-r{background:var(--red-l);color:var(--red);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700}
+/* ========== GRIDS ========== */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px}
+/* ========== TABLE ========== */
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{text-align:right;padding:8px 10px;font-size:11px;font-weight:700;color:var(--text2);border-bottom:1px solid var(--border);background:#faf9f6}
+.tbl td{padding:9px 10px;border-bottom:1px solid #f0ece5;color:#1a1a1a}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:#faf9f6}
+/* ========== BADGES ========== */
+.badge{display:inline-flex;align-items:center;gap:3px;font-size:11px;padding:3px 8px;border-radius:20px;font-weight:600;white-space:nowrap}
+.b-green{background:var(--green-l);color:var(--green)}
+.b-red{background:var(--red-l);color:var(--red)}
+.b-gold{background:var(--gold-l);color:var(--gold-d)}
+.b-blue{background:var(--blue-l);color:var(--blue)}
+.b-purple{background:var(--purple-l);color:var(--purple)}
+.b-orange{background:var(--orange-l);color:var(--orange)}
+.b-gray{background:#f0ece5;color:#666}
+/* ========== PROGRESS ========== */
+.prog-bar{height:5px;background:#eee;border-radius:3px;overflow:hidden;display:inline-block;vertical-align:middle}
+.prog-fill{height:100%;border-radius:3px}
+.p-gold{background:var(--gold)}.p-green{background:var(--green)}.p-blue{background:var(--blue)}.p-red{background:var(--red)}.p-orange{background:var(--orange)}
+/* ========== TASKS ========== */
+.task-item{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #f0ece5}
+.task-item:last-child{border-bottom:none}
+.task-check{width:17px;height:17px;min-width:17px;border-radius:5px;border:2px solid #ccc;margin-top:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;transition:all .15s}
+.task-check.done{background:var(--green);border-color:var(--green);color:#fff}
+.task-name{font-size:13px;font-weight:500}
+.task-meta{font-size:11px;color:var(--text2);margin-top:2px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+/* ========== TIMELINE ========== */
+.timeline-item{display:flex;gap:12px;padding:8px 0;border-bottom:1px solid #f0ece5}
+.timeline-item:last-child{border-bottom:none}
+.tl-dot{width:9px;height:9px;min-width:9px;border-radius:50%;margin-top:5px}
+.tl-dot.green{background:var(--green)}.tl-dot.gold{background:var(--gold)}.tl-dot.blue{background:var(--blue)}.tl-dot.red{background:var(--red)}.tl-dot.orange{background:var(--orange)}
+.tl-title{font-size:13px;font-weight:500}
+.tl-date{font-size:12px;color:var(--text2);margin-top:2px}
+/* ========== TEAM ========== */
+.member-row{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid #f0ece5}
+.member-row:last-child{border-bottom:none}
+.avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.av-gold{background:var(--gold-l);color:var(--gold-d)}
+.av-green{background:var(--green-l);color:var(--green)}
+.av-blue{background:var(--blue-l);color:var(--blue)}
+.av-purple{background:var(--purple-l);color:var(--purple)}
+.av-red{background:var(--red-l);color:var(--red)}
+.member-info{flex:1}
+.member-name{font-size:13px;font-weight:600}
+.member-role{font-size:11px;color:var(--text2)}
+/* ========== ALERTS ========== */
+.alert{border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.alert-red{background:var(--red-l);border-right:3px solid var(--red)}
+.alert-orange{background:var(--orange-l);border-right:3px solid var(--orange)}
+.alert-green{background:var(--green-l);border-right:3px solid var(--green)}
+.alert-blue{background:var(--blue-l);border-right:3px solid var(--blue)}
+.alert-title{font-size:13px;font-weight:600}
+.alert-sub{font-size:12px;margin-top:3px;opacity:.9}
+.t-red{color:var(--red)}.t-orange{color:var(--orange)}.t-green{color:var(--green)}.t-blue{color:var(--blue)}
+/* ========== CONTRACTS ========== */
+.contract-card{border:1px solid var(--border);border-radius:11px;padding:13px;margin-bottom:8px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .15s;background:#fff}
+.contract-card:hover{background:#faf9f6;transform:translateX(-2px)}
+/* ========== TABS ========== */
+.tab-row{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.tab{padding:5px 13px;border-radius:20px;font-size:12px;cursor:pointer;border:1px solid var(--border);color:var(--text2);background:#fff;transition:all .12s;font-weight:500}
+.tab:hover{background:#f5f4f0}
+.tab.active{background:var(--gold);border-color:var(--gold);color:#fff;font-weight:700}
+/* ========== MISC ========== */
+.flex-row{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.info-bar{display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--gold-l),var(--green-l));border:1px solid var(--gold);border-radius:11px;padding:11px 15px;margin-bottom:14px}
+.info-bar i{color:var(--gold);font-size:17px;flex-shrink:0}
+.info-bar-text{font-size:12px;color:var(--gold-d);font-weight:600}
+.pagination{display:flex;justify-content:space-between;align-items:center;padding:11px 0 0;font-size:12px;color:var(--text2)}
+.page-btns{display:flex;gap:6px}
+.section-label{font-size:11px;font-weight:700;color:var(--text2);margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--border)}
+/* trend cells */
+.trend-up{color:var(--green);font-weight:600}.trend-dn{color:var(--red);font-weight:600}.trend-same{color:var(--text2)}
+</style>
+</head>
+<body>
+<div id="root">
+
+<!-- ==================== SPLASH ==================== -->
+<div class="splash" id="splash">
+  <div style="text-align:center">
+    <div class="logo-icon">🕋</div>
+    <div class="logo-title">منصة الحج الذكية — الراجحي</div>
+    <div class="logo-sub">إدارة مشاريع الحج المتكاملة · بيانات حقيقية من تقرير إغلاق 1447هـ</div>
+    <div style="margin-top:8px;display:flex;justify-content:center;gap:6px;flex-wrap:wrap">
+      <span class="logo-tag"><i class="ti ti-circle-check"></i> 4,787 حاج</span>
+      <span class="logo-tag"><i class="ti ti-award"></i> صفر شكاوى</span>
+      <span class="logo-tag"><i class="ti ti-trending-up"></i> +27.2% نمو</span>
+    </div>
+  </div>
+  <div class="splash-divider"></div>
+  <div class="splash-label">اختر وجهتك</div>
+  <div class="splash-grid">
+    <div class="splash-card" onclick="showDashboard()">
+      <i class="ti ti-layout-dashboard"></i>
+      <div class="splash-card-title">لوحة القيادة التنفيذية</div>
+      <div class="splash-card-desc">مؤشرات الأداء الفعلية من التقرير الختامي الموحد — 1447هـ</div>
+    </div>
+    <div class="splash-card" onclick="openProject()">
+      <i class="ti ti-folder-open"></i>
+      <div class="splash-card-title">إدارة المشروع</div>
+      <div class="splash-card-desc">الحج المباشر 1447هـ · تشغيل، حجاج، عقود، تفويج وكل شيء</div>
+    </div>
+  </div>
+  <div class="proj-card" onclick="openProject()">
+    <div class="proj-badge badge-active"><i class="ti ti-circle-check" style="font-size:10px"></i> مُغلق تشغيلياً</div>
+    <div class="proj-name">الحج المباشر — موسم 1447هـ / 2026م</div>
+    <div class="proj-sub">شركة الراجحي · كود المشروع: DH-1447 · راعي المشروع: الرئيس التنفيذي</div>
+    <div style="display:flex;gap:12px;margin-bottom:10px;flex-wrap:wrap">
+      <span style="font-size:11px;color:var(--text2)">4,787 حاج (95.7٪ من حصة 5,000)</span>
+      <span style="font-size:11px;color:var(--text2)">414 موظف · 115 مرشد</span>
+      <span style="font-size:11px;color:var(--text2)">201 تعاقد · 11 فندق · 316 حافلة</span>
+    </div>
+    <div class="proj-prog"><div class="proj-prog-fill" style="width:95.7%"></div></div>
+    <div class="proj-pct">95.7٪ من الحصة — الإغلاق المالي معلّق</div>
+  </div>
+</div>
+
+<!-- ==================== DASHBOARD ==================== -->
+<div class="main-app" id="dashboard-app">
+  <div class="topbar">
+    <div class="topbar-left">
+      <span class="back-icon" onclick="goBack()"><i class="ti ti-arrow-right"></i></span>
+      <span class="topbar-title">🕋 لوحة القيادة التنفيذية — الراجحي 1447هـ</span>
+    </div>
+    <div class="topbar-right">
+      <span class="badge b-green"><i class="ti ti-circle-check" style="font-size:10px"></i> مُغلق تشغيلياً</span>
+      <span class="badge b-red">الإغلاق المالي معلّق</span>
+      <div class="avatar av-gold">PMO</div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="info-bar">
+      <i class="ti ti-report-analytics"></i>
+      <div class="info-bar-text">التقرير الختامي الموحد + تقرير إغلاق PMO · إعداد: 14 سبتمبر 2026م · تصنيف: داخلي – للإدارة العليا</div>
+    </div>
+
+    <!-- KPIs row 1 -->
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-label">الحجاج الفعليون</div><div class="stat-val" style="color:var(--green)">4,787</div><div class="stat-sub"><span class="stat-up">95.7٪</span> من حصة 5,000</div></div>
+      <div class="stat-card"><div class="stat-label">الحجوزات المدفوعة</div><div class="stat-val">4,089</div><div class="stat-sub"><span class="stat-down">81.8٪</span> من الحصة (الحقيقية)</div></div>
+      <div class="stat-card"><div class="stat-label">حجوزات المجاملة</div><div class="stat-val" style="color:var(--red)">583</div><div class="stat-sub"><span class="stat-down">12.2٪</span> من الحجاج — غير مدفوعة</div></div>
+      <div class="stat-card"><div class="stat-label">النمو عن 1446هـ</div><div class="stat-val" style="color:var(--green)">+27.2٪</div><div class="stat-sub">3,763 ← 4,787 حاج</div></div>
+    </div>
+    <!-- KPIs row 2 -->
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-label">الشكاوى المستحقة</div><div class="stat-val" style="color:var(--green)">0</div><div class="stat-sub stat-up">الموسم الثاني على التوالي</div></div>
+      <div class="stat-card"><div class="stat-label">الوفيات / الإصابات</div><div class="stat-val" style="color:var(--green)">0</div><div class="stat-sub stat-up">أداء سلامة مثالي</div></div>
+      <div class="stat-card"><div class="stat-label">أقصى هامش ربح</div><div class="stat-val" style="color:var(--red)">7.5٪</div><div class="stat-sub"><span class="stat-down">كان 30٪ في 1444هـ ← تراجع 75٪</span></div></div>
+      <div class="stat-card"><div class="stat-label">الحصة السوقية</div><div class="stat-val" style="color:var(--orange)">7.7٪</div><div class="stat-sub"><span class="stat-down">دون متوسط السوق 8.3٪</span></div></div>
+    </div>
+
+    <div class="two-col">
+      <!-- RAG Status -->
+      <div class="card">
+        <div class="card-title">حالة المشروع عند الإغلاق (RAG) <span class="badge b-blue">PMO</span></div>
+        <table class="tbl">
+          <tr><th>المحور</th><th>الحالة</th><th>التعليق</th></tr>
+          <tr><td>التشغيل والنطاق</td><td><span class="rag-badge-g">أخضر</span></td><td>4,787 حاج — صفر وفيات</td></tr>
+          <tr><td>المبيعات</td><td><span class="rag-badge-y">أصفر</span></td><td>81.8٪ مدفوع + 583 مجاملة</td></tr>
+          <tr><td>الجدول الزمني</td><td><span class="rag-badge-y">أصفر</span></td><td>تأخر الوزارة — عوّضت الشركة</td></tr>
+          <tr><td>التكلفة / المالي</td><td><span class="rag-badge-r">أحمر</span></td><td>هامش 7.5٪ — لا تقرير مالي</td></tr>
+          <tr><td>الجودة</td><td><span class="rag-badge-g">أخضر</span></td><td>تفعيل نسك 97.8٪ — تسكين 1:28 د</td></tr>
+          <tr><td>رضا العميل</td><td><span class="rag-badge-y">أصفر</span></td><td>غير مُقاس — لا استبانة</td></tr>
+          <tr><td>الموارد البشرية</td><td><span class="rag-badge-y">أصفر</span></td><td>استقرار الفريق 70٪</td></tr>
+          <tr><td>الاستدامة التجارية</td><td><span class="rag-badge-r">أحمر</span></td><td>حصة دون المتوسط — تسعير أعلى</td></tr>
+        </table>
+      </div>
+      <!-- 4 season trend -->
+      <div class="card">
+        <div class="card-title">الاتجاه عبر 4 مواسم <span class="badge b-gold">1444–1447هـ</span></div>
+        <table class="tbl">
+          <tr><th>المؤشر</th><th>1444هـ</th><th>1445هـ</th><th>1446هـ</th><th>1447هـ</th></tr>
+          <tr><td>الحجاج الفعليون</td><td>8,218</td><td>6,620</td><td>3,763</td><td class="trend-up">4,787</td></tr>
+          <tr><td>المستهدف</td><td>10,000</td><td>9,700</td><td>5,000</td><td>5,000</td></tr>
+          <tr><td>نسبة التحقق</td><td>82٪</td><td>68٪</td><td>75٪</td><td class="trend-up">96٪</td></tr>
+          <tr><td>هامش الربح الأقصى</td><td class="trend-up">30٪</td><td>20٪</td><td>20٪</td><td class="trend-dn">7.5٪</td></tr>
+          <tr><td>حصة الراجحي</td><td class="trend-up">16.4٪</td><td>10.7٪</td><td>6.1٪</td><td class="trend-up">7.7٪</td></tr>
+          <tr><td>شكاوى التعويض</td><td class="trend-dn">85</td><td>26</td><td>0</td><td class="trend-up">0</td></tr>
+          <tr><td>عدد الشركات المنافسة</td><td>8</td><td>10</td><td>12</td><td class="trend-dn">12–13</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Top Priorities / Actions -->
+    <div class="card">
+      <div class="card-title">أولويات الإجراءات P1 — مطلوب قرار من الإدارة العليا <span class="badge b-red">5 إجراءات حرجة</span></div>
+      <div class="alert alert-red"><div class="alert-title t-red">A-01 — إصدار التقرير المالي الختامي (الموعد: 30 سبتمبر 2026)</div><div class="alert-sub t-red">المالية · يُوقف الإغلاق الرسمي للمشروع · يعالج: I-16, R-05</div></div>
+      <div class="alert alert-red"><div class="alert-title t-red">A-02 — إعادة هيكلة التكلفة والتسعير قبل تكوين باقات 1448هـ</div><div class="alert-sub t-red">الإدارة العليا + المالية · مبدأ «خفض التكلفة لا رفع الهامش» · يعالج: I-04, R-01</div></div>
+      <div class="alert alert-orange"><div class="alert-title t-orange">A-03 — اتفاقيات متعددة السنوات مع الفنادق والطيران والنقل (محرم 1448)</div><div class="alert-sub t-orange">التعاقدات · يمنع التعاقد تحت الضغط · يعالج: I-05, R-06</div></div>
+      <div class="alert alert-orange"><div class="alert-title t-orange">A-04 — برنامج شراكة المرشدين الدوليين: عمولات مراجعة + صرف ملزم</div><div class="alert-sub t-orange">الحج المباشر · خطر فقدان أهم قناة استقطاب · يعالج: I-06, R-03</div></div>
+      <div class="alert alert-blue"><div class="alert-title t-blue">A-05 — ملف تفاوض مؤسسي مع وزارة الحج (57٪ من التحديات خارجية)</div><div class="alert-sub t-blue">الإدارة العليا + العلاقات الحكومية · جدول مبكر، سياسة الاسترجاع، عمولات المرشدين · يعالج: I-01, I-02, I-03, R-02</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PROJECT APP ==================== -->
+<div class="main-app" id="project-app">
+  <div class="topbar">
+    <div class="topbar-left">
+      <span class="back-icon" onclick="goBack()"><i class="ti ti-arrow-right"></i></span>
+      <span class="topbar-title">🕋 الحج المباشر — موسم 1447هـ · DH-1447</span>
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-badge"><i class="ti ti-circle-check" style="font-size:10px"></i> مُغلق تشغيلياً</span>
+      <span class="badge b-red" style="font-size:11px">المالي معلّق</span>
+      <div class="avatar av-gold">PMO</div>
+    </div>
+  </div>
+  <div class="body-wrap">
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">🕋 الراجحي — 1447هـ</div>
+        <div class="sidebar-proj-info">4,787 حاج · 201 تعاقد · 414 موظف</div>
+      </div>
+      <div class="nav-section">الرئيسية</div>
+      <div class="nav-item active" onclick="navTo('overview',this)"><i class="ti ti-home"></i> نظرة عامة</div>
+      <div class="nav-item" onclick="navTo('kpis',this)"><i class="ti ti-chart-bar"></i> مؤشرات الأداء</div>
+      <div class="nav-item" onclick="navTo('milestones',this)"><i class="ti ti-flag"></i> المعالم الرئيسية</div>
+      <div class="nav-item" onclick="navTo('tasks',this)"><i class="ti ti-checkbox"></i> سجل الإجراءات</div>
+      <div class="nav-section">إدارة الحجاج</div>
+      <div class="nav-item" onclick="navTo('pilgrims',this)"><i class="ti ti-user-circle"></i> بيانات الحجاج</div>
+      <div class="nav-item" onclick="navTo('packages',this)"><i class="ti ti-package"></i> الباقات والمبيعات</div>
+      <div class="nav-item" onclick="navTo('flights',this)"><i class="ti ti-plane"></i> الطيران والنقل</div>
+      <div class="nav-item" onclick="navTo('housing',this)"><i class="ti ti-building"></i> الإسكان</div>
+      <div class="nav-item" onclick="navTo('masha3er',this)"><i class="ti ti-map-pin"></i> المشاعر والتفويج</div>
+      <div class="nav-section">الإدارة</div>
+      <div class="nav-item" onclick="navTo('contracts',this)"><i class="ti ti-file-certificate"></i> العقود (201)</div>
+      <div class="nav-item" onclick="navTo('team',this)"><i class="ti ti-users"></i> الفريق (414)</div>
+      <div class="nav-item" onclick="navTo('risks',this)"><i class="ti ti-alert-triangle"></i> المخاطر والقضايا</div>
+      <div class="nav-item" onclick="navTo('issues',this)"><i class="ti ti-bug"></i> سجل القضايا</div>
+      <div class="nav-item" onclick="navTo('lessons',this)"><i class="ti ti-bulb"></i> الدروس المستفادة</div>
+      <div class="nav-item" onclick="navTo('closure',this)"><i class="ti ti-lock"></i> قائمة الإغلاق</div>
+      <div class="sidebar-footer">
+        <div class="back-btn" onclick="goBack()"><i class="ti ti-arrow-right"></i> الرئيسية</div>
+      </div>
+    </div>
+    <div class="content" id="page-content"></div>
+  </div>
+</div>
+
+</div><!-- #root -->
+
+<script>
+function goBack(){
+  document.getElementById('splash').style.display='flex';
+  document.getElementById('dashboard-app').style.display='none';
+  document.getElementById('project-app').style.display='none';
+}
+function showDashboard(){
+  document.getElementById('splash').style.display='none';
+  document.getElementById('dashboard-app').style.display='flex';
+  document.getElementById('project-app').style.display='none';
+}
+function openProject(){
+  document.getElementById('splash').style.display='none';
+  document.getElementById('dashboard-app').style.display='none';
+  document.getElementById('project-app').style.display='flex';
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.querySelector('.nav-item[onclick="navTo(\'overview\',this)"]').classList.add('active');
+  renderPage('overview');
+}
+function navTo(page,el){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  el.classList.add('active');
+  renderPage(page);
+}
+function renderPage(page){
+  var pages={overview:pOverview,kpis:pKpis,milestones:pMilestones,tasks:pTasks,
+    pilgrims:pPilgrims,packages:pPackages,flights:pFlights,housing:pHousing,
+    masha3er:pMasha3er,contracts:pContracts,team:pTeam,risks:pRisks,
+    issues:pIssues,lessons:pLessons,closure:pClosure};
+  document.getElementById('page-content').innerHTML=(pages[page]||pOverview)();
+}
+
+/* ============================== OVERVIEW ============================== */
+function pOverview(){return`
+<div class="page-header"><h2>نظرة عامة على المشروع</h2><p>الحج المباشر 1447هـ / 2026م · الإصدار 1.0 · تاريخ الإغلاق: 14 سبتمبر 2026م</p></div>
+<div class="stats-row">
+  <div class="stat-card"><div class="stat-label">الحجاج الفعليون</div><div class="stat-val" style="color:var(--green)">4,787</div><div class="stat-sub"><span class="stat-up">95.7٪</span> من حصة 5,000</div></div>
+  <div class="stat-card"><div class="stat-label">شكاوى التعويض</div><div class="stat-val" style="color:var(--green)">صفر</div><div class="stat-sub stat-up">الموسم الثاني على التوالي (85→26→0→0)</div></div>
+  <div class="stat-card"><div class="stat-label">إجمالي التعاقدات</div><div class="stat-val">201</div><div class="stat-sub">أُنجزت في أسبوعين</div></div>
+  <div class="stat-card"><div class="stat-label">النمو السنوي</div><div class="stat-val" style="color:var(--green)">+27.2٪</div><div class="stat-sub">3,763 ← 4,787</div></div>
+</div>
+<div class="two-col">
+  <div class="card">
+    <div class="card-title">ملخص الإغلاق <span class="badge b-blue">PMO</span></div>
+    <div class="alert alert-green"><div class="alert-title t-green">✓ مُغلق تشغيلياً</div><div class="alert-sub t-green">اكتمل تشغيل 4,787 حاج عبر كامل الرحلة — صفر وفيات وإصابات</div></div>
+    <div class="alert alert-red"><div class="alert-title t-red">⚠ الإغلاق المالي معلّق</div><div class="alert-sub t-red">التقرير المالي لم يُسلَّم — مطلوب بحلول 30 سبتمبر 2026 (A-01)</div></div>
+    <div class="alert alert-orange"><div class="alert-title t-orange">⏳ إجراءات معلّقة</div><div class="alert-sub t-orange">صرف عمولات المرشدين · إغلاق الانتدابات والمشتريات (أودو) · تأكيد إغلاق 201 عقد</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">توزيع الحجاج على المخيمات</div>
+    <div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>المعيصم</span><span style="font-weight:600">3,564 <span style="color:var(--text2);font-weight:400">(74.5٪)</span></span></div><div class="prog-bar" style="width:100%;height:6px"><div class="prog-fill p-gold" style="width:74.5%"></div></div></div>
+    <div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>مخيم ب72</span><span style="font-weight:600">928 <span style="color:var(--text2);font-weight:400">(19.4٪)</span></span></div><div class="prog-bar" style="width:100%;height:6px"><div class="prog-fill p-blue" style="width:19.4%"></div></div></div>
+    <div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>الكبش</span><span style="font-weight:600">295 <span style="color:var(--text2);font-weight:400">(6.2٪)</span></span></div><div class="prog-bar" style="width:100%;height:6px"><div class="prog-fill p-green" style="width:6.2%"></div></div></div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;font-size:12px;padding-top:10px;border-top:1px solid var(--border)">
+      <span>👨 ذكور: <strong>2,537</strong></span>
+      <span>👩 إناث: <strong>2,250</strong></span>
+      <span>🧭 مرشدون: <strong>115</strong></span>
+    </div>
+  </div>
+</div>
+<div class="two-col">
+  <div class="card">
+    <div class="card-title">التقييم العام للموسم</div>
+    <table class="tbl">
+      <tr><th>المحور</th><th>التقييم</th><th>المبرر</th></tr>
+      <tr><td>الجودة والسلامة</td><td><span class="badge b-green">ممتاز</span></td><td>صفر شكاوى لموسمين، إشادات رسمية</td></tr>
+      <tr><td>التشغيل والجاهزية</td><td><span class="badge b-green">جيد جداً</span></td><td>201 عقد أسبوعين، تفعيل 97.8٪</td></tr>
+      <tr><td>النمو والحصة</td><td><span class="badge b-gold">مقبول</span></td><td>+27٪ لكن حصة 7.7٪ دون المتوسط</td></tr>
+      <tr><td>الاستدامة المالية</td><td><span class="badge b-red">مصدر قلق</span></td><td>هامش 7.5٪، 12٪ مجاملة، لا تقرير مالي</td></tr>
+      <tr><td>التطور المؤسسي</td><td><span class="badge b-blue">جيد</span></td><td>مركز اتصال، إعلام متعدد اللغات، PMO</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <div class="card-title">آخر المعالم ✓ / ✗</div>
+    <div class="task-item"><div class="task-check done">✓</div><div style="flex:1"><div class="task-name">إنجاز 201 تعاقد في أسبوعين</div><div class="task-meta"><span class="badge b-green">مكتمل</span></div></div></div>
+    <div class="task-item"><div class="task-check done">✓</div><div style="flex:1"><div class="task-name">رفع 19 باقة على نسك (المركز الثاني)</div><div class="task-meta"><span class="badge b-green">مكتمل</span></div></div></div>
+    <div class="task-item"><div class="task-check done">✓</div><div style="flex:1"><div class="task-name">تسكين القادمين من المدينة في 1:28 دقيقة</div><div class="task-meta"><span class="badge b-green">مكتمل — إشادة رسمية</span></div></div></div>
+    <div class="task-item"><div class="task-check done">✓</div><div style="flex:1"><div class="task-name">تشغيل المشاعر — 3 مخيمات — صفر حوادث</div><div class="task-meta"><span class="badge b-green">مكتمل</span></div></div></div>
+    <div class="task-item"><div class="task-check" style="border-color:var(--red)"></div><div style="flex:1"><div class="task-name">التقرير المالي الختامي</div><div class="task-meta"><span class="badge b-red">غير مُسلَّم — مستبعد صراحة</span></div></div></div>
+    <div class="task-item"><div class="task-check" style="border-color:var(--orange)"></div><div style="flex:1"><div class="task-name">صرف عمولات المرشدين نقداً</div><div class="task-meta"><span class="badge b-orange">متأخر</span></div></div></div>
+  </div>
+</div>`;}
+
+/* ============================== KPIs ============================== */
+function pKpis(){return`
+<div class="page-header"><h2>مؤشرات الأداء الرئيسية</h2><p>لوحة المؤشرات الكاملة من التقرير الختامي الموحد — 1447هـ</p></div>
+<div class="card">
+  <div class="card-title">محور الحجم <span class="badge b-blue">6 مؤشرات</span></div>
+  <table class="tbl">
+    <tr><th>المؤشر</th><th>القيمة</th><th>ملاحظة</th><th>الحالة</th></tr>
+    <tr><td>الحصة المخصصة</td><td>5,000</td><td>8.1٪ من حصة البرنامج (62,000)</td><td><span class="rag-badge-g">●</span></td></tr>
+    <tr><td>الحجاج الفعليون</td><td>4,787</td><td>ذكور 2,537 / إناث 2,250</td><td><span class="rag-badge-g">●</span></td></tr>
+    <tr><td>الحجوزات المدفوعة</td><td>4,089 (81.8٪)</td><td>المبيعات الحقيقية — ليست 95٪</td><td><span class="rag-badge-y">●</span></td></tr>
+    <tr><td>حجوزات المجاملة</td><td>583 (12.2٪)</td><td>تُحصَّل خارج نسك — تؤثر على البيانات</td><td><span class="rag-badge-r">●</span></td></tr>
+    <tr><td>المرشدون</td><td>115 (2.4٪)</td><td>معدل 41.6 حاج لكل مرشد</td><td><span class="rag-badge-g">●</span></td></tr>
+    <tr><td>النمو السنوي</td><td>+27.2٪</td><td>3,763 ← 4,787</td><td><span class="rag-badge-g">●</span></td></tr>
+  </table>
+</div>
+<div class="card">
+  <div class="card-title">محور الجودة <span class="badge b-green">7 مؤشرات</span></div>
+  <table class="tbl">
+    <tr><th>المؤشر</th><th>القيمة</th><th>ملاحظة</th><th>الحالة</th></tr>
+    <tr><td>الشكاوى المستحقة للتعويض</td><td style="color:var(--green);font-weight:700">0</td><td>الموسم الثاني على التوالي (85→26→0→0)</td><td><span class="rag-badge-g">●</span></td></tr>
+    <tr><td>الوفيات / الإصابات الجسيمة</td><td style="color:var(--green);font-weight:700">0</td><td>—</td><td><span class="rag-badge-g">●</span></td></tr>
+    <tr><td>تفعيل بطاقات نسك</td><td>97.76٪</td><td>107 حالة تسليم يدوي (2.24٪)</td><td><span class="rag-badge-g">●</span></td></tr>
+    <tr><td>متوسط زمن التفعيل</td><td>11 ساعة 31 دقيقة</td><td>—</td><td><span class="rag-badge-g">●</span></td></tr>
+    <tr><td>زمن تسكين القادمين من المدينة</td><td style="color:var(--green);font-weight:700">1:28 دقيقة</td><td>مفاتيح مكة سُلمت مسبقاً في المدينة</td><td><span class="rag-badge-g">●</span></td></tr>
+    <tr><td>رضا الحجاج المُقاس</td><td style="color:var(--red)">غير مُبلَّغ</td><td>لا استبانة ولا NPS — فجوة جوهرية</td><td><span class="rag-badge-r">●</span></td></tr>
+    <tr><td>إشادات رسمية</td><td>2 إشادة</td><td>التسكين في مزدلفة + الإخراج الإعلامي</td><td><span class="rag-badge-g">●</span></td></tr>
+  </table>
+</div>
+<div class="two-col">
+  <div class="card">
+    <div class="card-title">محور التعاقدات والإسكان</div>
+    <table class="tbl">
+      <tr><th>المؤشر</th><th>القيمة</th></tr>
+      <tr><td>إجمالي التعاقدات</td><td><strong>201</strong></td></tr>
+      <tr><td>سكن</td><td>19</td></tr>
+      <tr><td>نقل</td><td>38</td></tr>
+      <tr><td>طيران</td><td>9</td></tr>
+      <tr><td>إعاشة</td><td>13</td></tr>
+      <tr><td>خدمات إضافية</td><td>7</td></tr>
+      <tr><td>مرشدون</td><td>115</td></tr>
+      <tr><td>الفنادق (مكة + المدينة)</td><td>11 (6+5)</td></tr>
+      <tr><td>إجمالي الأسرّة</td><td>9,476</td></tr>
+      <tr><td>إجمالي الغرف</td><td>3,132</td></tr>
+      <tr><td>أسرّة التحسين</td><td>1,396 (14.7٪)</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <div class="card-title">محور الطيران والنقل</div>
+    <table class="tbl">
+      <tr><th>المؤشر</th><th>القيمة</th></tr>
+      <tr><td>مقاعد الطيران الإجمالية</td><td><strong>4,672</strong></td></tr>
+      <tr><td>GDS (وسطاء)</td><td>2,309</td></tr>
+      <tr><td>الراجحي المباشر</td><td>2,363 (50.6٪)</td></tr>
+      <tr><td>وصول جدة</td><td>3,076 (66٪)</td></tr>
+      <tr><td>وصول المدينة</td><td>1,596 (34٪)</td></tr>
+      <tr><td>مغادرة جدة</td><td>4,133 (88٪)</td></tr>
+      <tr><td>مغادرة المدينة</td><td>539 (12٪)</td></tr>
+      <tr><td>شركات الطيران</td><td>9 شركات</td></tr>
+      <tr><td>الحافلات</td><td>316 حافلة</td></tr>
+      <tr><td>المقاعد</td><td>16,153</td></tr>
+      <tr><td>رحلات النقل</td><td>7,092 رحلة</td></tr>
+      <tr><td>مقاعد قطار المشاعر</td><td>3,019 (63٪)</td></tr>
+    </table>
+  </div>
+</div>`;}
+
+/* ============================== MILESTONES ============================== */
+function pMilestones(){return`
+<div class="page-header"><h2>سجل المعالم الرئيسية</h2><p>المخطط مقابل الفعلي — موسم 1447هـ</p></div>
+<div class="card">
+  <table class="tbl">
+    <tr><th>المعلم</th><th>المخطط</th><th>الفعلي</th><th>الحالة</th><th>ملاحظات</th></tr>
+    <tr><td>إعلان بدء الموسم والتأهيل من الوزارة</td><td>مبكر</td><td>متأخر</td><td><span class="badge b-red">✗ خارجي</span></td><td>ضغط كل المراحل اللاحقة</td></tr>
+    <tr><td>اجتياز التأهيل (5 معايير + 20 بند)</td><td>—</td><td>مُجتاز</td><td><span class="badge b-green">✓</span></td><td>—</td></tr>
+    <tr><td>توزيع الحصص</td><td>قبل الموسم</td><td>متأخر — 5,000</td><td><span class="badge b-gold">△</span></td><td>بلا ضمان بيع</td></tr>
+    <tr><td>إتاحة التعاقدات على نسك</td><td>—</td><td>متأخر</td><td><span class="badge b-red">✗ خارجي</span></td><td>—</td></tr>
+    <tr><td>إنجاز 201 تعاقد</td><td>—</td><td>أسبوعان</td><td><span class="badge b-green">✓ إنجاز</span></td><td>رغم التأخر</td></tr>
+    <tr><td>رفع 19 باقة على نسك</td><td>—</td><td>أسبوع — المركز الثاني</td><td><span class="badge b-green">✓</span></td><td>—</td></tr>
+    <tr><td>اللقاءات الدولية (6 دول) + 135 افتراضية</td><td>خطة سنوية</td><td>منفَّذة</td><td><span class="badge b-gold">△</span></td><td>اعتماد الرحلة تأخر — أول مرة</td></tr>
+    <tr><td>إغلاق المبيعات</td><td>5,000</td><td>4,787 (مدفوع 4,089)</td><td><span class="badge b-gold">△</span></td><td>تغيير آلية البيع خلال الموسم</td></tr>
+    <tr><td>تفعيل بطاقات نسك</td><td>100٪</td><td>97.76٪ — 107 يدوياً</td><td><span class="badge b-green">✓</span></td><td>متوسط 11 ساعة 31 دقيقة</td></tr>
+    <tr><td>تسليم مفاتيح مكة في المدينة</td><td>—</td><td>منفَّذ</td><td><span class="badge b-green">✓ إشادة</span></td><td>تسكين 1:28 دقيقة</td></tr>
+    <tr><td>استلام المخيمات والأساور</td><td>قبل التشغيل</td><td>متأخر</td><td><span class="badge b-red">✗ خارجي</span></td><td>فرش غير مكتمل</td></tr>
+    <tr><td>التشغيل في المشاعر (3 مخيمات)</td><td>—</td><td>مكتمل</td><td><span class="badge b-green">✓ إشادة</span></td><td>نقص حافلات التشريق</td></tr>
+    <tr><td>المغادرة الكاملة</td><td>4,672</td><td>4,672</td><td><span class="badge b-green">✓</span></td><td>جدة 4,133 / المدينة 539</td></tr>
+    <tr><td>صرف عمولات المرشدين</td><td>بعد الموسم</td><td>متأخر</td><td><span class="badge b-red">✗ داخلي</span></td><td>أثر على رضا المرشدين</td></tr>
+    <tr><td>إغلاق الانتدابات والمشتريات</td><td>بعد الموسم</td><td>متأخر (أودو)</td><td><span class="badge b-orange">△</span></td><td>—</td></tr>
+    <tr><td>التقرير الختامي التشغيلي</td><td>—</td><td>مُسلَّم (67 صفحة)</td><td><span class="badge b-green">✓</span></td><td>—</td></tr>
+    <tr><td>التقرير المالي الختامي</td><td>—</td><td>غير مُسلَّم</td><td><span class="badge b-red">✗ مستبعد</span></td><td>A-01 — 30 سبتمبر 2026</td></tr>
+  </table>
+</div>`;}
+
+/* ============================== TASKS / ACTIONS ============================== */
+function pTasks(){return`
+<div class="page-header"><h2>سجل الإجراءات (Action Register)</h2><p>16 إجراء للموسم القادم 1448هـ — مصدر: تقرير إغلاق PMO</p></div>
+<div class="tab-row"><div class="tab active">الكل (16)</div><div class="tab">P1 — حرجة (5)</div><div class="tab">P2 — عالية (8)</div><div class="tab">P3 — متوسطة (3)</div></div>
+<div class="card">
+  <div class="card-title">🔴 P1 — حرجة <span class="badge b-red">5 إجراءات</span></div>
+  <div class="task-item"><div class="task-check"></div><div style="flex:1"><div class="task-name">A-01 — إصدار التقرير المالي الختامي 1447هـ</div><div class="task-meta"><span class="badge b-red">P1</span><span>المالية</span><span>30 سبتمبر 2026</span><span class="badge b-orange">معلّق</span></div></div></div>
+  <div class="task-item"><div class="task-check"></div><div style="flex:1"><div class="task-name">A-02 — إعادة هيكلة التكلفة والتسعير + مقارنة سعرية</div><div class="task-meta"><span class="badge b-red">P1</span><span>الإدارة العليا + المالية</span><span>قبل توزيع الحصص</span></div></div></div>
+  <div class="task-item"><div class="task-check"></div><div style="flex:1"><div class="task-name">A-03 — اتفاقيات متعددة السنوات (فنادق، طيران، نقل، إعاشة)</div><div class="task-meta"><span class="badge b-red">P1</span><span>التعاقدات</span><span>محرم 1448</span></div></div></div>
+  <div class="task-item"><div class="task-check"></div><div style="flex:1"><div class="task-name">A-04 — برنامج شراكة المرشدين الدوليين</div><div class="task-meta"><span class="badge b-red">P1</span><span>الحج المباشر</span><span>محرم 1448</span></div></div></div>
+  <div class="task-item"><div class="task-check"></div><div style="flex:1"><div class="task-name">A-05 — ملف تفاوض مؤسسي مع وزارة الحج والعمرة</div><div class="task-meta"><span class="badge b-red">P1</span><span>الإدارة العليا + العلاقات الحكومية</span><span>قبل موسم 1448</span></div></div></div>
+</div>
+<div class="card">
+  <div class="card-title">🟡 P2 — عالية <span class="badge b-gold">8 إجراءات</span></div>
+  <div class="task-item"><div class="task-check"></div><div style="flex:1"><div class="task-name">A-06 — سياسة حجوزات المجاملة وفصل مؤشر البيع المدفوع</div><div class="task-meta"><span class="badge b-gold">P2</span><span>الحج المباشر + المالية</span><span>قبل فتح البيع</span></div></div></div>
+  <div class="task-item"><div class="task-check"></div><div style="flex:1"><div class="task-name">A-07 — استبانة رضا الحجاج (NPS) + مؤشرات مركز الاتصال</div><div class="task-meta"><span class="badge b-gold">P2</span><span>الحج المباشر</span><span>من أول وصول 1448</span></div></div></div>
+  <div class="task-item"><div class="task-check"></div><div style="flex:1"><div class="task-name">A-08 — مسار موافقات موسمي مختصر في أودو + تفويض شراء مباشر</div><div class="task-meta"><span class="badge b-gold">P2</span><span>سلاسل الإمداد + الموارد البشرية</span></div></div></div>
+  <div class="task-item"><div class="task-check"></div><div style="flex:1"><div class="task-name">A-09 — خطة سنوية معتمدة للقاءات الدولية مع قياس التحويل</div><div class="task-meta"><span class="badge b-gold">P2</span><span>الحج المباشر + الإعلام</span><span>محرم 1448</span></div></div></div>
+  <div class="task-item"><div class="task-check"></div><div style="flex:1"><div class="task-name">A-10 — تنسيق مبكر مع النقابة للتشريق ومع الوزارة للمخيمات</div><div class="task-meta"><span class="badge b-gold">P2</span><span>النقل + المشاعر</span><span>قبل ذو القعدة</span></div></div></div>
+  <div class="task-item"><div class="task-check"></div><div style="flex:1"><div class="task-name">A-11 — تضمين الوصول المبكر للمدينة في العقد أو تسعيره إضافياً</div><div class="task-meta"><span class="badge b-gold">P2</span><span>التعاقدات</span><span>قبل تكوين الباقات</span></div></div></div>
+  <div class="task-item"><div class="task-check"></div><div style="flex:1"><div class="task-name">A-12 — بنود حماية من رسوم/إلغاء الطيران في العقود</div><div class="task-meta"><span class="badge b-gold">P2</span><span>الطيران</span><span>قبل التعاقد</span></div></div></div>
+</div>
+<div class="card">
+  <div class="card-title">🟢 P3 — متوسطة <span class="badge b-green">3 إجراءات</span></div>
+  <div class="task-item"><div class="task-check"></div><div style="flex:1"><div class="task-name">A-14 — دراسة جدوى نظام إلكتروني موحد (تشغيل + مالي + مؤشرات)</div><div class="task-meta"><span class="badge b-blue">P3</span><span>تقنية المعلومات</span><span>ربيع الأول 1448</span></div></div></div>
+  <div class="task-item"><div class="task-check"></div><div style="flex:1"><div class="task-name">A-15 — خطة توسع لاستعادة حصة ≥ 10٪ (حجوزات مباشرة، أسواق جديدة)</div><div class="task-meta"><span class="badge b-blue">P3</span><span>الإدارة العليا</span><span>خطة 1448</span></div></div></div>
+  <div class="task-item"><div class="task-check"></div><div style="flex:1"><div class="task-name">A-16 — اعتماد قالب PMO مع مستهدفات رقمية لكل مؤشر</div><div class="task-meta"><span class="badge b-blue">P3</span><span>PMO</span><span>قبل الموسم</span></div></div></div>
+</div>`;}
+
+/* ============================== PILGRIMS ============================== */
+function pPilgrims(){return`
+<div class="page-header"><h2>بيانات الحجاج</h2><p>4,787 حاج — 3 مخيمات + 11 فندق (6 مكة + 5 المدينة)</p></div>
+<div class="stats-row">
+  <div class="stat-card"><div class="stat-label">إجمالي الحجاج</div><div class="stat-val">4,787</div></div>
+  <div class="stat-card"><div class="stat-label">أفراد مدفوعون</div><div class="stat-val">4,089</div><div class="stat-sub stat-up">85.4٪ من الحجاج</div></div>
+  <div class="stat-card"><div class="stat-label">مجاملة</div><div class="stat-val" style="color:var(--red)">583</div><div class="stat-sub stat-down">12.2٪</div></div>
+  <div class="stat-card"><div class="stat-label">مرشدون</div><div class="stat-val">115</div><div class="stat-sub">41.6 حاج/مرشد</div></div>
+</div>
+<div class="two-col">
+  <div class="card">
+    <div class="card-title">التوزيع المفصّل</div>
+    <table class="tbl">
+      <tr><th>الفئة</th><th>العدد</th><th>النسبة</th><th>ملاحظة</th></tr>
+      <tr><td>حجوزات أفراد (مدفوعة)</td><td><strong>4,089</strong></td><td>81.8٪ من الحصة</td><td>المبيعات الحقيقية</td></tr>
+      <tr><td>حجوزات مجاملة</td><td><strong>583</strong></td><td>12.2٪</td><td>تُحصَّل خارج نسك جزئياً</td></tr>
+      <tr><td>مرشدون — المعيصم</td><td>81</td><td>1.7٪</td><td>—</td></tr>
+      <tr><td>مرشدون — الكبش</td><td>11</td><td>0.2٪</td><td>—</td></tr>
+      <tr><td>مرشدون — ب72</td><td>23</td><td>0.5٪</td><td>—</td></tr>
+      <tr><td>مقاعد غير مباعة</td><td style="color:var(--red)">213</td><td>4.3٪</td><td>تأثر بتغيير آلية البيع</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <div class="card-title">فجوات البيانات المُعلَنة</div>
+    <div class="alert alert-red"><div class="alert-title t-red">رضا الحجاج — غير مُقاس</div><div class="alert-sub t-red">لا استبانة ولا NPS — الصفر شكاوى ليس بديلاً</div></div>
+    <div class="alert alert-orange"><div class="alert-title t-orange">إلغاءات الاسترجاع (90٪ حتى 1 ذو القعدة)</div><div class="alert-sub t-orange">عدد الإلغاءات وأثرها المالي غير مُبلَّغ</div></div>
+    <div class="alert alert-orange"><div class="alert-title t-orange">بيانات الرعاية الصحية</div><div class="alert-sub t-orange">صفر وفيات مُعلَن — عدد الحالات والتحويلات غير مُبلَّغ</div></div>
+    <div class="alert alert-blue"><div class="alert-title t-blue">مجاملة وتحصيل خارج نسك (I-09)</div><div class="alert-sub t-blue">يُضعف اكتمال البيانات ودقة المؤشرات التجارية</div></div>
+  </div>
+</div>`;}
+
+/* ============================== PACKAGES ============================== */
+function pPackages(){return`
+<div class="page-header"><h2>الباقات والمبيعات</h2><p>19 باقة في 5 فئات · أسعار 21,097 – 45,849 ريال</p></div>
+<div class="stats-row">
+  <div class="stat-card"><div class="stat-label">عدد الباقات</div><div class="stat-val">19</div><div class="stat-sub">5 فئات</div></div>
+  <div class="stat-card"><div class="stat-label">أدنى سعر</div><div class="stat-val">21,097 ﷼</div></div>
+  <div class="stat-card"><div class="stat-label">أعلى سعر</div><div class="stat-val">45,849 ﷼</div></div>
+  <div class="stat-card"><div class="stat-label">متوسط السعر</div><div class="stat-val">30,182 ﷼</div></div>
+</div>
+<div class="two-col">
+  <div class="card">
+    <div class="card-title">الفئات والتوزيع</div>
+    <table class="tbl">
+      <tr><th>الفئة</th><th>عدد الباقات</th><th>النسبة</th><th>المدة</th></tr>
+      <tr><td>رفاهية</td><td>9</td><td class="trend-up">47٪</td><td>—</td></tr>
+      <tr><td>أساسية</td><td>6</td><td>32٪</td><td>—</td></tr>
+      <tr><td>مميزة</td><td>2</td><td>11٪</td><td>—</td></tr>
+      <tr><td>رفاهية متنقلة</td><td>1</td><td>5٪</td><td>—</td></tr>
+      <tr><td>متميزة متنقلة</td><td>1</td><td>5٪</td><td>—</td></tr>
+      <tr><td colspan="4" style="color:var(--text2);font-size:11px">مدة الباقات: 11–24 يوماً · متوسط 17 يوماً</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <div class="card-title">تحليل السوق والتنافسية</div>
+    <div class="alert alert-red"><div class="alert-title t-red">هامش الربح الأقصى: 7.5٪ (كان 30٪)</div><div class="alert-sub t-red">تراجع 75٪ خلال 4 مواسم — الاستدامة المالية مهددة</div></div>
+    <div class="alert alert-orange"><div class="alert-title t-orange">التسعير أعلى من المنافسين</div><div class="alert-sub t-orange">التقرير يُقر: «ارتفاع الهوامش المستهدفة مقارنة بالمنافسين» — هيكل تكلفة لا هامش</div></div>
+    <div style="font-size:12px;color:var(--text2);margin-top:10px">
+      <div style="font-weight:700;margin-bottom:6px">حصة السوق:</div>
+      <div style="margin-bottom:4px">متوسط الشركة الواحدة: 62,000 ÷ 12 = <strong>5,167</strong> حاج</div>
+      <div style="margin-bottom:4px">حصة الراجحي: 7.7٪ <span style="color:var(--red)">(دون متوسط 8.3٪)</span></div>
+      <div>ذروة 1444هـ: 8,218 حاج (16.4٪) — الحالي عند <strong>58٪</strong> من الذروة</div>
+    </div>
+  </div>
+</div>`;}
+
+/* ============================== FLIGHTS ============================== */
+function pFlights(){return`
+<div class="page-header"><h2>الطيران والنقل</h2><p>4,672 مقعد طيران · 316 حافلة · قطار المشاعر 3,019 مقعد (63٪)</p></div>
+<div class="stats-row">
+  <div class="stat-card"><div class="stat-label">مقاعد الطيران</div><div class="stat-val">4,672</div><div class="stat-sub">= الحجاج − المرشدين</div></div>
+  <div class="stat-card"><div class="stat-label">حجز ذاتي (الراجحي)</div><div class="stat-val">50.6٪</div><div class="stat-sub">2,363 مقعد</div></div>
+  <div class="stat-card"><div class="stat-label">الحافلات</div><div class="stat-val">316</div><div class="stat-sub">7,092 رحلة نقل</div></div>
+  <div class="stat-card"><div class="stat-label">قطار المشاعر</div><div class="stat-val">3,019</div><div class="stat-sub stat-up">63٪ من الحجاج</div></div>
+</div>
+<div class="two-col">
+  <div class="card">
+    <div class="card-title">مسارات الوصول والمغادرة</div>
+    <table class="tbl">
+      <tr><th>المسار</th><th>الوصول</th><th>المغادرة</th></tr>
+      <tr><td>جدة</td><td>3,076 (66٪)</td><td>4,133 (88٪)</td></tr>
+      <tr><td>المدينة المنورة</td><td>1,596 (34٪)</td><td>539 (12٪)</td></tr>
+      <tr><td><strong>الإجمالي</strong></td><td><strong>4,672</strong></td><td><strong>4,672</strong></td></tr>
+    </table>
+    <div style="margin-top:10px;font-size:12px;color:var(--text2);background:var(--blue-l);padding:10px;border-radius:8px">
+      💡 غالبية الحجاج بدأوا بالمدينة وغادروا من جدة — وهو ما أتاح إنجاز تسليم مفاتيح مكة مسبقاً في المدينة (تسكين 1:28 دقيقة)
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">أبرز شركات الطيران (B2B)</div>
+    <table class="tbl">
+      <tr><th>الشركة</th><th>المقاعد</th><th>النسبة</th></tr>
+      <tr><td>🇸🇦 الخطوط السعودية</td><td>1,014</td><td>21.7٪</td></tr>
+      <tr><td>🇹🇷 التركية</td><td>618</td><td>13.2٪</td></tr>
+      <tr><td>🇪🇬 مصر للطيران</td><td>182</td><td>3.9٪</td></tr>
+      <tr><td>أخرى (6 شركات)</td><td>2,858</td><td>61.2٪</td></tr>
+    </table>
+    <div class="alert alert-orange" style="margin-top:10px"><div class="alert-title t-orange">⚠ تحدي: رسوم إضافية وتهديد إلغاء (الحرب)</div><div class="alert-sub t-orange">I-10 — تم الإغلاق · A-12: بنود حماية في عقود 1448هـ</div></div>
+    <div class="alert alert-red" style="margin-top:6px"><div class="alert-title t-red">⚠ تحدي: لا حافلات أيام التشريق</div><div class="alert-sub t-red">I-08 — النقابة لم تحدد المحطات · A-10: تنسيق مبكر</div></div>
+  </div>
+</div>`;}
+
+/* ============================== HOUSING ============================== */
+function pHousing(){return`
+<div class="page-header"><h2>الإسكان</h2><p>11 فندق (6 مكة + 5 المدينة) · 9,476 سرير · 3,132 غرفة</p></div>
+<div class="stats-row">
+  <div class="stat-card"><div class="stat-label">إجمالي الأسرّة</div><div class="stat-val">9,476</div><div class="stat-sub">≈ 1.98 سرير/حاج</div></div>
+  <div class="stat-card"><div class="stat-label">إجمالي الغرف</div><div class="stat-val">3,132</div></div>
+  <div class="stat-card"><div class="stat-label">أسرّة التحسين</div><div class="stat-val">1,396</div><div class="stat-sub stat-up">14.7٪ — أداة بيع إضافي</div></div>
+  <div class="stat-card"><div class="stat-label">تصنيف النجوم</div><div class="stat-val">5+</div><div class="stat-sub">5 فنادق 5 نجوم</div></div>
+</div>
+<div class="two-col">
+  <div class="card">
+    <div class="card-title">تصنيف الفنادق</div>
+    <table class="tbl">
+      <tr><th>التصنيف</th><th>العدد</th></tr>
+      <tr><td>⭐⭐⭐⭐⭐ خمس نجوم</td><td>5 فنادق</td></tr>
+      <tr><td>⭐⭐⭐⭐ أربع نجوم</td><td>2 فنادق</td></tr>
+      <tr><td>أخرى</td><td>4 فنادق</td></tr>
+      <tr><td><strong>الإجمالي</strong></td><td><strong>11 فندق</strong></td></tr>
+    </table>
+    <div style="margin-top:12px;font-size:12px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span>مكة المكرمة</span><span style="font-weight:600">6 فنادق</span></div>
+      <div class="prog-bar" style="width:100%;height:5px"><div class="prog-fill p-gold" style="width:55%"></div></div>
+      <div style="display:flex;justify-content:space-between;margin:8px 0 4px"><span>المدينة المنورة</span><span style="font-weight:600">5 فنادق</span></div>
+      <div class="prog-bar" style="width:100%;height:5px"><div class="prog-fill p-blue" style="width:45%"></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">تحديات الإسكان</div>
+    <div class="alert alert-red"><div class="alert-title t-red">I-12 — وصول مبكر للمدينة خارج العقد</div><div class="alert-sub t-red">تكاليف سكن وإعاشة غير مخططة · A-11: إدراجه في العقد</div></div>
+    <div class="alert alert-orange"><div class="alert-title t-orange">⚠ تركّز: فندق واحد بـ 29٪ من الأسرّة (2,776 سرير)</div><div class="alert-sub t-orange">R-06: يرفع مخاطر الاعتماد على مزود واحد · A-03: شراكات متعددة</div></div>
+    <div class="alert alert-blue"><div class="alert-title t-blue">التعاقد تحت ضغط الوقت</div><div class="alert-sub t-blue">عدم إتاحة فنادق مكة والمدينة معاً أضعف التفاوض</div></div>
+    <div class="alert alert-green"><div class="alert-title t-green">✓ إنجاز: تسكين 1:28 دقيقة (إشادة رسمية)</div><div class="alert-sub t-green">مفاتيح مكة سُلمت للحجاج في المدينة مسبقاً</div></div>
+  </div>
+</div>`;}
+
+/* ============================== MASHA3ER ============================== */
+function pMasha3er(){return`
+<div class="page-header"><h2>المشاعر المقدسة والتفويج</h2><p>3 مخيمات: المعيصم (3,564) · ب72 (928) · الكبش (295)</p></div>
+<div class="stats-row-3">
+  <div class="stat-card"><div class="stat-label">مخيم المعيصم</div><div class="stat-val">3,564</div><div class="stat-sub stat-up">74.5٪ من الحجاج</div></div>
+  <div class="stat-card"><div class="stat-label">مخيم ب72</div><div class="stat-val">928</div><div class="stat-sub">19.4٪</div></div>
+  <div class="stat-card"><div class="stat-label">مخيم الكبش</div><div class="stat-val">295</div><div class="stat-sub">6.2٪</div></div>
+</div>
+<div class="two-col">
+  <div class="card">
+    <div class="card-title">الإنجازات <span class="badge b-green">إشادة رسمية</span></div>
+    <div class="task-item"><div class="task-check done">✓</div><div style="flex:1"><div class="task-name">تسكين مزدلفة — إشادة رسمية من الرئيس التنفيذي للبرنامج</div></div></div>
+    <div class="task-item"><div class="task-check done">✓</div><div style="flex:1"><div class="task-name">صفر وفيات وإصابات جسيمة في المشاعر</div></div></div>
+    <div class="task-item"><div class="task-check done">✓</div><div style="flex:1"><div class="task-name">اكتمال التشغيل في 3 مخيمات</div></div></div>
+    <div class="task-item"><div class="task-check" style="border-color:var(--red)"></div><div style="flex:1"><div class="task-name">تأخر استلام المخيمات والأساور واكتمال الفرش (I-07)</div><div class="task-meta"><span class="badge b-red">تحدي خارجي — مغلق موسمياً</span></div></div></div>
+    <div class="task-item"><div class="task-check" style="border-color:var(--red)"></div><div style="flex:1"><div class="task-name">عدم توفر حافلات أيام التشريق (I-08)</div><div class="task-meta"><span class="badge b-red">تحدي خارجي</span><span>A-10: تنسيق مبكر مع النقابة</span></div></div></div>
+    <div class="task-item"><div class="task-check" style="border-color:var(--orange)"></div><div style="flex:1"><div class="task-name">ضعف الرقابة على الطاقة الاستيعابية ودخول غير المخصصين (I-14)</div><div class="task-meta"><span class="badge b-orange">مشترك — مفتوح</span></div></div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">توزيع المرشدين على المخيمات</div>
+    <table class="tbl">
+      <tr><th>المخيم</th><th>الحجاج</th><th>المرشدون</th><th>معدل</th></tr>
+      <tr><td>المعيصم</td><td>3,564</td><td>81</td><td>44 حاج/مرشد</td></tr>
+      <tr><td>ب72</td><td>928</td><td>23</td><td>40 حاج/مرشد</td></tr>
+      <tr><td>الكبش</td><td>295</td><td>11</td><td>27 حاج/مرشد</td></tr>
+      <tr><td><strong>الإجمالي</strong></td><td><strong>4,787</strong></td><td><strong>115</strong></td><td><strong>41.6</strong></td></tr>
+    </table>
+    <div class="alert alert-orange" style="margin-top:12px"><div class="alert-title t-orange">تحدي 1448هـ: عمولات المرشدين أقل من السوق</div><div class="alert-sub t-orange">R-03: درجة خطر 20/25 — A-04: برنامج شراكة ملزم</div></div>
+  </div>
+</div>`;}
+
+/* ============================== CONTRACTS ============================== */
+function pContracts(){return`
+<div class="page-header"><h2>العقود والتعاقدات</h2><p>201 تعاقد أُنجزت في أسبوعين — المركز الثاني بين الشركات</p></div>
+<div class="stats-row">
+  <div class="stat-card"><div class="stat-label">إجمالي التعاقدات</div><div class="stat-val">201</div></div>
+  <div class="stat-card"><div class="stat-label">زمن الإنجاز</div><div class="stat-val" style="color:var(--green)">أسبوعان</div><div class="stat-sub stat-up">رغم تأخر نسك</div></div>
+  <div class="stat-card"><div class="stat-label">الإغلاق</div><div class="stat-val" style="color:var(--orange)">غير مُبلَّغ</div><div class="stat-sub">تأكيد إغلاق مطلوب</div></div>
+  <div class="stat-card"><div class="stat-label">التقرير المالي</div><div class="stat-val" style="color:var(--red)">معلّق</div><div class="stat-sub">A-01 — 30 سبتمبر</div></div>
+</div>
+<div class="two-col">
+  <div class="card">
+    <div class="card-title">توزيع التعاقدات حسب النوع</div>
+    <div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>مرشدون</span><span><strong>115</strong></span></div><div class="prog-bar" style="width:100%;height:5px"><div class="prog-fill p-gold" style="width:57%"></div></div></div>
+    <div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>نقل</span><span><strong>38</strong></span></div><div class="prog-bar" style="width:100%;height:5px"><div class="prog-fill p-blue" style="width:19%"></div></div></div>
+    <div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>إعاشة</span><span><strong>13</strong></span></div><div class="prog-bar" style="width:100%;height:5px"><div class="prog-fill p-green" style="width:6.5%"></div></div></div>
+    <div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>طيران</span><span><strong>9</strong></span></div><div class="prog-bar" style="width:100%;height:5px"><div class="prog-fill p-orange" style="width:4.5%"></div></div></div>
+    <div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>سكن</span><span><strong>19</strong></span></div><div class="prog-bar" style="width:100%;height:5px"><div class="prog-fill p-purple" style="width:9.5%"></div></div></div>
+    <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span>خدمات إضافية</span><span><strong>7</strong></span></div><div class="prog-bar" style="width:100%;height:5px"><div class="prog-fill p-red" style="width:3.5%"></div></div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">تحديات التعاقدات (I-01 إلى I-05)</div>
+    <div class="contract-card"><div><i class="ti ti-alert-circle" style="font-size:22px;color:var(--red)"></i></div><div style="flex:1"><div style="font-size:13px;font-weight:600">I-01 — تأخر الوزارة في بدء الموسم</div><div style="font-size:11px;color:var(--red);margin-top:3px">خارجي · مرتفع · مفتوحة → A-05 تفاوض مؤسسي</div></div></div>
+    <div class="contract-card"><div><i class="ti ti-file-x" style="font-size:22px;color:var(--red)"></i></div><div style="flex:1"><div style="font-size:13px;font-weight:600">I-05 — غياب شراكات طويلة الأمد مع المزودين</div><div style="font-size:11px;color:var(--red);margin-top:3px">داخلي · مرتفع · مفتوحة → A-03 اتفاقيات متعددة السنوات</div></div></div>
+    <div class="contract-card"><div><i class="ti ti-shield-x" style="font-size:22px;color:var(--orange)"></i></div><div style="flex:1"><div style="font-size:13px;font-weight:600">غياب بنود تعاقدية على نسك</div><div style="font-size:11px;color:var(--orange);margin-top:3px">خارجي · متوسط → A-05 ضمن ملف التفاوض</div></div></div>
+  </div>
+</div>`;}
+
+/* ============================== TEAM ============================== */
+function pTeam(){return`
+<div class="page-header"><h2>الفريق والموارد البشرية</h2><p>414 موظف · 55٪ سعوديون · 15٪ نساء · 290,000+ ساعة عمل</p></div>
+<div class="stats-row">
+  <div class="stat-card"><div class="stat-label">إجمالي الموظفين</div><div class="stat-val">414</div></div>
+  <div class="stat-card"><div class="stat-label">نسبة السعودة</div><div class="stat-val">55٪</div><div class="stat-sub">229 موظفاً سعودياً</div></div>
+  <div class="stat-card"><div class="stat-label">نسبة المرأة</div><div class="stat-val">15٪</div><div class="stat-sub">60 موظفة</div></div>
+  <div class="stat-card"><div class="stat-label">استقرار الفريق</div><div class="stat-val" style="color:var(--orange)">70٪</div><div class="stat-sub stat-down">30٪ دوران سنوي</div></div>
+</div>
+<div class="two-col">
+  <div class="card">
+    <div class="card-title">مؤشرات الكفاءة</div>
+    <table class="tbl">
+      <tr><th>المؤشر</th><th>القيمة</th><th>ملاحظة</th></tr>
+      <tr><td>حجاج لكل موظف</td><td><strong>11.6</strong></td><td>التقرير ذكر 16 — تعارض (C-5)</td></tr>
+      <tr><td>ساعات العمل الإجمالية</td><td>290,000+</td><td>≈ 700 ساعة/موظف في الموسم</td></tr>
+      <tr><td>ساعات التدريب</td><td>760 ساعة</td><td>45 برنامجاً</td></tr>
+      <tr><td>تدريب المرشدين</td><td>270 ساعة</td><td>105 عنوان دورة</td></tr>
+      <tr><td>الخبرة التراكمية</td><td>2,000+ سنة</td><td>—</td></tr>
+      <tr><td>استمرارية الكفاءة</td><td>80٪</td><td>—</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <div class="card-title">تحديات الفريق</div>
+    <div class="alert alert-red"><div class="alert-title t-red">I-06 — تأخر صرف عمولات المرشدين نقداً</div><div class="alert-sub t-red">داخلي · مرتفع · مفتوحة · خطر فقدان أهم قناة استقطاب · A-04</div></div>
+    <div class="alert alert-orange"><div class="alert-title t-orange">I-11 — تأخر المشتريات والانتدابات (تعدد موافقات أودو)</div><div class="alert-sub t-orange">داخلي · متوسط · مفتوحة · A-08: مسار مختصر في أودو</div></div>
+    <div class="alert alert-orange"><div class="alert-title t-orange">استقرار الفريق 70٪ — فقدان 30٪ سنوياً</div><div class="alert-sub t-orange">R-09: درجة خطر 9/25 · خطة احتفاظ مطلوبة</div></div>
+    <div class="alert alert-blue"><div class="alert-title t-blue">التوعية: 144 ندوة (9 حضورية في 6 دول + 135 افتراضية)</div><div class="alert-sub t-blue">18,000+ حضور · بلا قياس أثر على الحجوزات</div></div>
+  </div>
+</div>`;}
+
+/* ============================== RISKS ============================== */
+function pRisks(){return`
+<div class="page-header"><h2>سجل المخاطر — موسم 1448هـ</h2><p>مقياس 1–5 للاحتمال والأثر · الدرجة = الاحتمال × الأثر</p></div>
+<div class="card">
+  <table class="tbl">
+    <tr><th>ID</th><th>الخطر</th><th>الاحتمال</th><th>الأثر</th><th>الدرجة</th><th>المالك</th></tr>
+    <tr>
+      <td>R-01</td><td>استمرار انكماش الهامش مع تسعير أعلى من السوق</td>
+      <td>4</td><td>5</td>
+      <td style="background:var(--red-l);color:var(--red);font-weight:700;text-align:center">20</td>
+      <td>الإدارة العليا + المالية</td>
+    </tr>
+    <tr>
+      <td>R-02</td><td>تكرار تأخر الوزارة + تغيير آلية البيع</td>
+      <td>5</td><td>4</td>
+      <td style="background:var(--red-l);color:var(--red);font-weight:700;text-align:center">20</td>
+      <td>الإدارة العليا</td>
+    </tr>
+    <tr>
+      <td>R-03</td><td>فقدان المرشدين لصالح المنافسين</td>
+      <td>4</td><td>5</td>
+      <td style="background:var(--red-l);color:var(--red);font-weight:700;text-align:center">20</td>
+      <td>الحج المباشر</td>
+    </tr>
+    <tr>
+      <td>R-04</td><td>عدم اكتمال بيع الحصة → غرف فائضة وخسائر</td>
+      <td>4</td><td>4</td>
+      <td style="background:var(--orange-l);color:var(--orange);font-weight:700;text-align:center">16</td>
+      <td>الحج المباشر</td>
+    </tr>
+    <tr>
+      <td>R-05</td><td>استمرار غياب البيانات المالية والرضا</td>
+      <td>4</td><td>4</td>
+      <td style="background:var(--orange-l);color:var(--orange);font-weight:700;text-align:center">16</td>
+      <td>المالية + PMO</td>
+    </tr>
+    <tr>
+      <td>R-06</td><td>الاعتماد على فندق واحد بـ 29٪ من الأسرّة</td>
+      <td>3</td><td>4</td>
+      <td style="background:var(--gold-l);color:var(--gold-d);font-weight:700;text-align:center">12</td>
+      <td>التعاقدات</td>
+    </tr>
+    <tr>
+      <td>R-07</td><td>تأخر استلام المخيمات/الأساور + نقص حافلات التشريق</td>
+      <td>4</td><td>3</td>
+      <td style="background:var(--gold-l);color:var(--gold-d);font-weight:700;text-align:center">12</td>
+      <td>المشاعر + النقل</td>
+    </tr>
+    <tr>
+      <td>R-08</td><td>اضطرابات الطيران بسبب الأوضاع الإقليمية</td>
+      <td>3</td><td>4</td>
+      <td style="background:var(--gold-l);color:var(--gold-d);font-weight:700;text-align:center">12</td>
+      <td>الطيران</td>
+    </tr>
+    <tr>
+      <td>R-09</td><td>فقدان 30٪ من الفريق + تأخر الانتدابات</td>
+      <td>3</td><td>3</td>
+      <td style="background:var(--green-l);color:var(--green);font-weight:700;text-align:center">9</td>
+      <td>الموارد البشرية</td>
+    </tr>
+    <tr>
+      <td>R-10</td><td>تضخم حجوزات المجاملة خارج نسك</td>
+      <td>3</td><td>3</td>
+      <td style="background:var(--green-l);color:var(--green);font-weight:700;text-align:center">9</td>
+      <td>الحج المباشر + المالية</td>
+    </tr>
+  </table>
+</div>`;}
+
+/* ============================== ISSUES ============================== */
+function pIssues(){return`
+<div class="page-header"><h2>سجل القضايا (Issues Log)</h2><p>16 قضية — 7 خارجية · 7 داخلية · 2 مشتركة</p></div>
+<div class="stats-row">
+  <div class="stat-card"><div class="stat-label">مفتوحة</div><div class="stat-val" style="color:var(--red)">10</div></div>
+  <div class="stat-card"><div class="stat-label">مغلقة موسمية</div><div class="stat-val" style="color:var(--green)">3</div></div>
+  <div class="stat-card"><div class="stat-label">مغلقة</div><div class="stat-val" style="color:var(--green)">1</div></div>
+  <div class="stat-card"><div class="stat-label">خارجية (وزارة/نسك)</div><div class="stat-val" style="color:var(--orange)">57٪</div></div>
+</div>
+<div class="card">
+  <table class="tbl">
+    <tr><th>ID</th><th>القضية</th><th>الجهة</th><th>الأثر</th><th>الحالة</th></tr>
+    <tr><td>I-01</td><td>تأخر بدء الموسم والتعاقدات من الوزارة</td><td><span class="badge b-orange">خارجي</span></td><td><span class="badge b-red">مرتفع</span></td><td><span class="badge b-red">مفتوحة</span></td></tr>
+    <tr><td>I-02</td><td>تغيير آلية بيع الحصص خلال الموسم (213 مقعد)</td><td><span class="badge b-orange">خارجي</span></td><td><span class="badge b-red">مرتفع</span></td><td><span class="badge b-red">مفتوحة</span></td></tr>
+    <tr><td>I-03</td><td>سياسة الاسترجاع 90٪ تؤخر التذاكر والتسكين</td><td><span class="badge b-orange">خارجي</span></td><td><span class="badge b-red">مرتفع</span></td><td><span class="badge b-red">مفتوحة</span></td></tr>
+    <tr><td>I-04</td><td>هوامش وأسعار أعلى من المنافسين</td><td><span class="badge b-blue">داخلي</span></td><td><span class="badge b-red">مرتفع</span></td><td><span class="badge b-red">مفتوحة</span></td></tr>
+    <tr><td>I-05</td><td>غياب شراكات طويلة الأمد مع المزودين</td><td><span class="badge b-blue">داخلي</span></td><td><span class="badge b-red">مرتفع</span></td><td><span class="badge b-red">مفتوحة</span></td></tr>
+    <tr><td>I-06</td><td>سقف عمولات المرشدين دون السوق + تأخر الصرف</td><td><span class="badge b-gold">مشترك</span></td><td><span class="badge b-red">مرتفع</span></td><td><span class="badge b-red">مفتوحة</span></td></tr>
+    <tr><td>I-07</td><td>تأخر استلام المخيمات والأساور</td><td><span class="badge b-orange">خارجي</span></td><td><span class="badge b-red">مرتفع</span></td><td><span class="badge b-green">مغلقة موسمية</span></td></tr>
+    <tr><td>I-08</td><td>لا حافلات أيام التشريق (النقابة)</td><td><span class="badge b-orange">خارجي</span></td><td><span class="badge b-red">مرتفع</span></td><td><span class="badge b-green">مغلقة موسمية</span></td></tr>
+    <tr><td>I-09</td><td>حجوزات مجاملة وتحصيل خارج نسك</td><td><span class="badge b-blue">داخلي</span></td><td><span class="badge b-gold">متوسط</span></td><td><span class="badge b-red">مفتوحة</span></td></tr>
+    <tr><td>I-10</td><td>رسوم إضافية/تهديد إلغاء طيران (الحرب)</td><td><span class="badge b-orange">خارجي</span></td><td><span class="badge b-gold">متوسط</span></td><td><span class="badge b-green">مغلقة</span></td></tr>
+    <tr><td>I-11</td><td>تأخر المشتريات (تعدد موافقات أودو)</td><td><span class="badge b-blue">داخلي</span></td><td><span class="badge b-gold">متوسط</span></td><td><span class="badge b-red">مفتوحة</span></td></tr>
+    <tr><td>I-12</td><td>وصول مبكر للمدينة بتكاليف خارج العقد</td><td><span class="badge b-blue">داخلي</span></td><td><span class="badge b-gold">متوسط</span></td><td><span class="badge b-red">مفتوحة</span></td></tr>
+    <tr><td>I-13</td><td>عدم مشاركة التقارير التشغيلية دورياً</td><td><span class="badge b-gold">مشترك</span></td><td><span class="badge b-gold">متوسط</span></td><td><span class="badge b-red">مفتوحة</span></td></tr>
+    <tr><td>I-14</td><td>ضعف الرقابة على الطاقة الاستيعابية للمخيمات</td><td><span class="badge b-gold">مشترك</span></td><td><span class="badge b-gold">متوسط</span></td><td><span class="badge b-red">مفتوحة</span></td></tr>
+    <tr><td>I-15</td><td>تأخر تصاريح مركبات المشاعر</td><td><span class="badge b-orange">خارجي</span></td><td><span class="badge b-gold">متوسط</span></td><td><span class="badge b-green">مغلقة موسمية</span></td></tr>
+    <tr><td>I-16</td><td>غياب التقرير المالي وقياس الرضا</td><td><span class="badge b-blue">داخلي</span></td><td><span class="badge b-red">مرتفع</span></td><td><span class="badge b-red">مفتوحة</span></td></tr>
+  </table>
+</div>`;}
+
+/* ============================== LESSONS ============================== */
+function pLessons(){return`
+<div class="page-header"><h2>الدروس المستفادة</h2><p>20 درسًا موثقًا — مقسّمة: ما نجح ويُثبَّت / ما لم ينجح ويُغيَّر</p></div>
+<div class="card">
+  <div class="card-title">✅ ما نجح ويجب تثبيته <span class="badge b-green">6 ممارسات</span></div>
+  <table class="tbl">
+    <tr><th>الممارسة</th><th>الدليل</th><th>التوصية</th></tr>
+    <tr><td>مرونة الفريق تحت ضغط الوقت</td><td>201 عقد في أسبوعين</td><td>توثيق الإجراءات كنموذج معتمد</td></tr>
+    <tr><td>تسليم مفاتيح مكة في المدينة مسبقاً</td><td>تسكين في 1:28 دقيقة</td><td>تعميم على كل المسارات</td></tr>
+    <tr><td>اللقاءات الحضورية الدولية (6 دول)</td><td>18,000+ حضور</td><td>خطة سنوية بموازنة + قياس الأثر</td></tr>
+    <tr><td>الإعلام متعدد اللغات (عربي+إنجليزي+فرنسي)</td><td>200,000+ وصول، إشادة وزارة</td><td>فريق دائم طوال العام</td></tr>
+    <tr><td>مركز الاتصال 24/7</td><td>5,340 استفسار</td><td>إضافة مؤشرات زمن الرد والحل</td></tr>
+    <tr><td>إدارة الجودة والشكاوى</td><td>85 → 26 → 0 → 0 خلال 4 مواسم</td><td>الانتقال إلى قياس الرضا الإيجابي (NPS)</td></tr>
+  </table>
+</div>
+<div class="card">
+  <div class="card-title">❌ ما لم ينجح ويجب تغييره <span class="badge b-red">6 ممارسات</span></div>
+  <table class="tbl">
+    <tr><th>الممارسة</th><th>المشكلة</th><th>التغيير المطلوب</th></tr>
+    <tr><td>التسعير برفع الهامش المستهدف</td><td>أسعار أعلى من المنافسين — هامش 7.5٪</td><td>خفض التكلفة لا رفع الهامش — مقارنة سعرية</td></tr>
+    <tr><td>تعاقدات موسمية قصيرة</td><td>تقلب الأسعار والتوافر + تعاقد تحت ضغط</td><td>اتفاقيات متعددة السنوات</td></tr>
+    <tr><td>عمولات المرشدين دون السوق + صرف متأخر</td><td>تهديد استمرارية قناة الاستقطاب</td><td>برنامج شراكة بحوافز وصرف ملزم</td></tr>
+    <tr><td>حجوزات مجاملة بلا سياسة</td><td>12٪ من الحجاج — بيانات ناقصة</td><td>سياسة وسقف وتسجيل في نسك</td></tr>
+    <tr><td>أنظمة وملفات متعددة غير مترابطة</td><td>أعمال يدوية وتأخر بيانات</td><td>نظام موحد يربط التشغيل والمالي</td></tr>
+    <tr><td>إغلاق الموسم دون تقرير مالي أو قياس رضا</td><td>لا يمكن تقييم الربحية أو التجربة</td><td>قالب إغلاق إلزامي يشملهما</td></tr>
+  </table>
+</div>`;}
+
+/* ============================== CLOSURE ============================== */
+function pClosure(){return`
+<div class="page-header"><h2>قائمة إغلاق المشروع</h2><p>الحالة: مُغلق تشغيلياً — الإغلاق المالي معلّق حتى 30 سبتمبر 2026</p></div>
+<div class="stats-row-3">
+  <div class="stat-card"><div class="stat-label">بنود مكتملة</div><div class="stat-val" style="color:var(--green)">5</div></div>
+  <div class="stat-card"><div class="stat-label">بنود معلّقة/متأخرة</div><div class="stat-val" style="color:var(--red)">5</div></div>
+  <div class="stat-card"><div class="stat-label">بنود غير منفَّذة</div><div class="stat-val" style="color:var(--orange)">3</div></div>
+</div>
+<div class="card">
+  <table class="tbl">
+    <tr><th>البند</th><th>الحالة</th><th>المطلوب</th></tr>
+    <tr><td>اكتمال النطاق التشغيلي</td><td><span class="badge b-green">✓ مكتمل</span></td><td>—</td></tr>
+    <tr><td>التقرير الختامي التشغيلي (67 صفحة)</td><td><span class="badge b-green">✓ مكتمل</span></td><td>تصحيح 7 تعارضات (A-13)</td></tr>
+    <tr><td>توثيق الدروس المستفادة</td><td><span class="badge b-green">✓ مكتمل</span></td><td>20 درسًا</td></tr>
+    <tr><td>سجل الإجراءات للموسم القادم</td><td><span class="badge b-green">✓ مكتمل</span></td><td>16 إجراءً</td></tr>
+    <tr><td>الانتقال إلى حوكمة PMO</td><td><span class="badge b-gold">قيد التنفيذ</span></td><td>قرار الإدارة العليا (A-16)</td></tr>
+    <tr><td>التقرير المالي الختامي</td><td><span class="badge b-red">✗ غير مكتمل</span></td><td>A-01 — 30 سبتمبر 2026</td></tr>
+    <tr><td>قياس رضا العميل</td><td><span class="badge b-red">✗ غير منفَّذ</span></td><td>A-07 — للموسم القادم</td></tr>
+    <tr><td>إغلاق التزامات المرشدين (العمولات)</td><td><span class="badge b-red">متأخر</span></td><td>صرف كامل العمولات</td></tr>
+    <tr><td>إغلاق الانتدابات والمشتريات (أودو)</td><td><span class="badge b-orange">متأخر</span></td><td>A-08</td></tr>
+    <tr><td>إغلاق العقود (201)</td><td><span class="badge b-orange">غير مُبلَّغ</span></td><td>تأكيد من إدارة التعاقدات</td></tr>
+  </table>
+</div>
+<div class="card">
+  <div class="card-title">القرارات المطلوبة من الإدارة العليا <span class="badge b-red">6 قرارات</span></div>
+  <div class="task-item"><div class="task-check"></div><div style="flex:1"><div class="task-name">اعتماد الإغلاق التشغيلي مع تعليق الإغلاق المالي حتى 30 سبتمبر</div></div></div>
+  <div class="task-item"><div class="task-check"></div><div style="flex:1"><div class="task-name">اعتماد مبدأ «خفض التكلفة لا رفع الهامش» في تسعير 1448هـ (A-02)</div></div></div>
+  <div class="task-item"><div class="task-check"></div><div style="flex:1"><div class="task-name">التفويض بتوقيع اتفاقيات متعددة السنوات (A-03)</div></div></div>
+  <div class="task-item"><div class="task-check"></div><div style="flex:1"><div class="task-name">اعتماد برنامج شراكة المرشدين وجدول صرف ملزم (A-04)</div></div></div>
+  <div class="task-item"><div class="task-check"></div><div style="flex:1"><div class="task-name">تكليف فريق تفاوض مؤسسي مع وزارة الحج والعمرة (A-05)</div></div></div>
+  <div class="task-item"><div class="task-check"></div><div style="flex:1"><div class="task-name">اعتماد PMO جهةً لإدارة برنامج 1448هـ من التخطيط إلى الإغلاق (A-16)</div></div></div>
+</div>`;}
+
+// Start
+renderPage('overview');
+</script>
+</body>
+</html>
